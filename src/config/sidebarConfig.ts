@@ -11,7 +11,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 	// left: 仅显示左侧边栏
 	// right: 仅显示右侧边栏
 	// both: 双侧边栏，1280px以上同时显示左右，769-1279px根据tabletSidebar配置显示其中一侧
-	position: "both",
+	position: "right",
 
 	// 平板端(769-1279px)显示哪侧侧边栏，仅position为both时生效
 	// left: 平板端显示左侧边栏
@@ -34,16 +34,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 	// configId 组件配置ID（目前仅广告组件使用），用于区分不同的广告配置
 	// responsive 响应式配置（部分组件可用，可用来设定部分组件需要的参数）
 	leftComponents: [
-		{
-			// 组件类型：用户资料组件
-			type: "profile",
-			// 是否启用该组件
-			enable: true,
-			// 组件位置
-			position: "top",
-			// 是否在文章详情页显示
-			showOnPostPage: true,
-		},
 		{
 			// 组件类型：公告组件
 			type: "announcement",
@@ -110,6 +100,35 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 
 	// 右侧边栏组件配置列表
 	rightComponents: [
+        {
+			// 组件类型：用户资料组件
+			type: "profile",
+			// 是否启用该组件
+			enable: true,
+			// 组件位置
+			position: "top",
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+        },
+        {
+            // 组件类型：Status 组件
+            type: "status",
+            // 是否启用该组件
+            enable: true,
+            // 组件位置
+            position: "top",
+            // 是否在文章详情页显示
+            showOnPostPage: true,
+        },{
+			// 组件类型：GitHub 活动组件
+			type: "github",
+			// 是否启用该组件
+			enable: true,
+			// 组件位置
+			position: "top",
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+		},
 		{
 			// 组件类型：站点统计组件
 			type: "stats",
@@ -124,7 +143,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 组件类型：日历组件
 			type: "calendar",
 			// 是否启用该组件
-			enable: true,
+			enable: false,
 			// 组件位置
 			position: "sticky",
 			// 是否在文章详情页显示

@@ -1,0 +1,134 @@
+---
+import WidgetLayout from "@/components/common/WidgetLayout.astro";
+---
+
+<WidgetLayout name="视奸我在干嘛awa" id="status">
+    <div id="status-content">
+        <p>Loading status...</p>
+    </div>
+</WidgetLayout>
+
+<script>
+    async function renderStatus() {
+        const contentDiv = document.getElementById('status-content');
+        if (!contentDiv) return;
+
+        try {
+            const url = `http://202.189.9.245:3100/api/current-status?name=%E9%9B%A8%E6%A0%B8`;
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            contentDiv.innerHTML = ''; // Clear loading message
+
+            if (data && data.length > 0) {
+                data.forEach(status => {
+                    const machineName = status.machine;
+                    // Only display 'raincore-pc' and 'raincore-phone'
+                    if (machineName === 'raincore-pc' || machineName === 'raincore-phone') {
+                        const lastSeen = new Date(status.access_time);
+                        const now = new Date();
+                        // Consider online if last seen within 5 minutes
+                        const isOnline = (now.getTime() - lastSeen.getTime()) < 5 * 60 * 1000;
+
+                        const program = status.window_title || 'Unknown Activity';
+                        const time = lastSeen.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+
+                        const newCard = document.createElement('div');
+                        newCard.className = 'status-card';
+                        
+                        const nameDiv = document.createElement('div');
+                        nameDiv.className = 'status-name';
+                        nameDiv.textContent = machineName;
+                        
+                        const statusDiv = document.createElement('div');
+                        statusDiv.className = 'status-indicator';
+                        statusDiv.textContent = isOnline ? '在线' : '离线';
+                        if (isOnline) {
+                            statusDiv.classList.add('online');
+                        }
+
+                        const programDiv = document.createElement('div');
+                        programDiv.className = 'status-program';
+                        programDiv.textContent = program;
+                        
+                        const timeDiv = document.createElement('div');
+                        timeDiv.className = 'status-time';
+                        timeDiv.textContent = time;
+
+                        const topRow = document.createElement('div');
+                        topRow.className = 'status-top-row';
+                        topRow.appendChild(nameDiv);
+                        topRow.appendChild(statusDiv);
+
+                        newCard.appendChild(topRow);
+                        newCard.appendChild(programDiv);
+                        newCard.appendChild(timeDiv);
+                        
+                        contentDiv.appendChild(newCard);
+                    }
+                });
+            } else {
+                 contentDiv.innerHTML = '<p>Could not find device status.</p>';
+            }
+        } catch (error) {
+            console.error('Error fetching status:', error);
+            if (contentDiv) {
+                contentDiv.innerHTML = '<p>Error loading status.</p>';
+            }
+        }
+    }
+
+    document.addEventListener('astro:page-load', renderStatus);
+
+</script>
+
+<style>
+    .status-card {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--line-divider);
+    }
+    .status-card:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .status-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    .status-name {
+        font-weight: bold;
+        color: var(--text-title);
+    }
+    .status-indicator {
+        font-size: 0.75rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: var(--radius-full);
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+    .status-indicator.online {
+        background-color: #28a745;
+        color: white;
+    }
+    .status-program {
+        font-size: 0.875rem;
+        color: var(--text-content);
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .status-time {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        text-align: right;
+    }
+</style>
