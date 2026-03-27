@@ -8,13 +8,23 @@ import { profileConfig } from "@/config/profileConfig";
 </WidgetLayout>
 
 <script define:vars={{ username: profileConfig.githubUsername }}>
-    if (username) {
-        GitHubActivity.feed({
-            username: username,
-            selector: "#github-activity-feed",
-            limit: 5, // optional
-        });
+    function loadGitHubActivity() {
+        if (username) {
+            const feedEl = document.getElementById('github-activity-feed');
+            if (feedEl) {
+                feedEl.innerHTML = '';
+            }
+            GitHubActivity.feed({
+                username: username,
+                selector: "#github-activity-feed",
+                limit: 5,
+            });
+        }
     }
+
+    loadGitHubActivity();
+
+    setInterval(loadGitHubActivity, 30 * 60 * 1000);
 </script>
 
 <style is:global>

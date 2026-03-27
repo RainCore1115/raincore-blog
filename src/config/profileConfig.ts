@@ -6,7 +6,7 @@ export const profileConfig: ProfileConfig = {
 	// 1. public 目录（以 "/" 开头，不优化）："/assets/images/avatar.webp"
 	// 2. src 目录（不以 "/" 开头，自动优化但会增加构建时间，推荐）："assets/images/avatar.webp"
 	// 3. 远程 URL："https://example.com/avatar.jpg"
-	avatar: "assets/images/avatar.avif",
+	avatar: "https://q1.qlogo.cn/g?b=qq&nk=105823395&s=640",
 
 	// 名字
 	name: "RainCore",
@@ -27,25 +27,25 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "qq",
 			icon: "fa7-brands:qq",
-			url: "https://qm.qq.com/q/ViDuAfQXGo",
+			url: "https://qm.qq.com/q/HUODrQ5Xi2",
+			showName: false,
+		},
+		{
+			name: "QQ群",
+			icon: "fa7-brands:qq",
+			url: "https://qun.qq.com/universal-share/share?ac=1&authKey=drNMAtD7%2Ba4aEBEAyzRprgEx3Acy1u58d7zFWvGXjEulx%2BRyTT3aKL2GM%2F0%2BQWho&busi_data=eyJncm91cENvZGUiOiI5NzU5OTU3MDUiLCJ0b2tlbiI6IjFaRHVKTzFRTWZtVzhuejdYMWdIM0MrUnpabE90anRpVmZrUWo1b3FvSzVMWTdOazRiTnZYNnZYb1VuSUt1R2EiLCJ1aW4iOiIxMDU4MjMzOTUifQ%3D%3D&data=51kQJLmxtwhT3qobZOEDhBSavnoCOlQhKEfBhD0wTahM5Jz4yDJeqbzlGqR833SC1N5PgdZMgnzrShgT94ISDg&svctype=4&tempid=h5_group_info",
 			showName: false,
 		},
 		{
 			name: "GitHub",
 			icon: "fa7-brands:github",
-			url: "https://github.com/RainCore1115",
+			url: "https://github.com/raincore1115",
 			showName: false,
 		},
 		{
 			name: "Email",
 			icon: "fa7-solid:envelope",
 			url: "mailto:raincore@baka86.love",
-			showName: false,
-		},
-		{
-			name: "RSS",
-			icon: "fa7-solid:rss",
-			url: "/rss/",
 			showName: false,
 		},
 	],
