@@ -8,20 +8,20 @@ import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeComponents from "rehype-components"; /* Render the custom directive content */
+import rehypeComponents from "rehype-components";/* Render the custom directive content */
 import rehypeKatex from "rehype-katex";
 import katex from "katex";
 import "katex/dist/contrib/mhchem.mjs"; // 加载 mhchem 扩展
 import rehypeSlug from "rehype-slug";
-import remarkDirective from "remark-directive"; /* Handle directives */
+import remarkDirective from "remark-directive";/* Handle directives */
 import remarkMath from "remark-math";
 import rehypeCallouts from "rehype-callouts";
 import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig, siteConfig } from "./src/config";
 import { i18n } from "./src/i18n/translation";
 import I18nKey from "./src/i18n/i18nKey";
-import { pluginLanguageBadge } from "expressive-code-language-badge"; /* Language Badge */
-import { pluginCollapsible } from "expressive-code-collapsible"; /* Collapsible */
+import { pluginLanguageBadge } from "expressive-code-language-badge";/* Language Badge */
+import { pluginCollapsible } from "expressive-code-collapsible";/* Collapsible */
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
@@ -34,20 +34,21 @@ import rehypeExternalLinks from "./src/plugins/rehype-external-links.mjs";
 import rehypeFigure from "./src/plugins/rehype-figure.mjs";
 import { remarkImageGrid } from "./src/plugins/remark-image-grid.js";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
-	site: siteConfig.site_url,
+    site: siteConfig.site_url,
+    base: "/",
+    trailingSlash: "always",
 
-	base: "/",
-	trailingSlash: "always",
-
-	// 图像优化配置
-	image: {
+    // 图像优化配置
+    image: {
 		// 全局响应式布局
 		experimentalLayout: "constrained",
 	},
 
-	integrations: [
+    integrations: [
 		swup({
 			theme: false,
 			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
@@ -174,7 +175,8 @@ export default defineConfig({
 		}),
 		mdx(),
 	],
-	markdown: {
+
+    markdown: {
 		remarkPlugins: [
 			remarkMath,
 			remarkReadingTime,
@@ -226,7 +228,8 @@ export default defineConfig({
 			],
 		],
 	},
-	vite: {
+
+    vite: {
 		plugins: [tailwindcss()],
 		resolve: {
 			alias: {
@@ -257,4 +260,6 @@ export default defineConfig({
 			cssMinify: "esbuild",
 		},
 	},
+
+    adapter: cloudflare()
 });
