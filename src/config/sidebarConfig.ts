@@ -124,6 +124,18 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			showOnPostPage: true,
 		},
 		{
+			// 组件类型：Status 组件（视奸我在干嘛awa）
+			type: "status",
+			enable: true,
+			showOnPostPage: true,
+		},
+		{
+			// 组件类型：GitHub 活动组件（雨核在github干嘛）
+			type: "github",
+			enable: true,
+			showOnPostPage: true,
+		},
+		{
 			// 组件类型：音乐播放器
 			type: "music",
 			enable: true,
