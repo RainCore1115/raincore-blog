@@ -1,0 +1,55 @@
+---
+import WidgetLayout from "@/components/common/WidgetLayout.astro";
+import { profileConfig } from "@/config/profileConfig";
+---
+
+<WidgetLayout name="雨核在github干嘛" id="github-activity">
+    <div id="github-activity-feed"></div>
+</WidgetLayout>
+
+<script define:vars={{ username: profileConfig.githubUsername }}>
+    function loadGitHubActivity() {
+        if (username) {
+            const feedEl = document.getElementById('github-activity-feed');
+            if (feedEl) {
+                feedEl.innerHTML = '';
+            }
+            GitHubActivity.feed({
+                username: username,
+                selector: "#github-activity-feed",
+                limit: 5,
+            });
+        }
+    }
+
+    loadGitHubActivity();
+
+    setInterval(loadGitHubActivity, 30 * 60 * 1000);
+</script>
+
+<style is:global>
+    /* 移除 WidgetLayout 的边框 */
+    #github-activity .card-base {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* 移除 github-activity-feed 插件的所有内部边框 */
+    #github-activity-feed .gha-feed,
+    #github-activity-feed .gha-header,
+    #github-activity-feed .gha-activity {
+        border: none !important;
+    }
+
+    #github-activity-feed .gha-feed {
+        padding-top: 0;
+    }
+
+    /* 隐藏头部, 页脚, 和空白占位符 */
+    .gha-header,
+    .gha-footer,
+    .gha-push,
+    .gha-push-small {
+        display: none !important;
+    }
+</style>

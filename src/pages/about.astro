@@ -1,0 +1,130 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import GitHubRepos from "@/components/common/GitHubRepos.svelte";
+---
+
+<MainGridLayout title="关于我" description="About Me">
+    <div class="about-page">
+        <section class="section">
+            <h1 class="page-title">关于我 / About Me</h1>
+            <p class="intro">
+                Hello！I'm RainCore，a music creator, open-source advocate, developer, and rhythm game enthusiast.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📦 我的项目</h2>
+            <p class="section-desc">以下是我个人与我的开发团队的开源项目，欢迎 Star ,fork issue和Pull Request!</p>
+            
+            <h3 class="sub-title">个人项目</h3>
+            <GitHubRepos username="RainCore1115" client:load />
+            
+            <h3 class="sub-title">Project Baka86 项目</h3>
+            <GitHubRepos username="knd-bot-dev-team" type="org" client:load />
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📫 联系方式</h2>
+            <p>如果你想和我交流技术问题，分享有趣的想法，或者只是想打个招呼和扩列，欢迎通过以下方式联系我：</p>
+            <ul class="contact-list">
+                <li>💻 <strong>GitHub</strong>: <a href="https://github.com/raincore1115" target="_blank">raincore1115</a></li>
+                <li>✉️ <strong>Email</strong>: <a href="mailto:raincore@baka86.love">raincore@baka86.love</a></li>
+                <li>🐧 <strong>QQ交流群</strong>: <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=drNMAtD7%2Ba4aEBEAyzRprgEx3Acy1u58d7zFWvGXjEulx%2BRyTT3aKL2GM%2F0%2BQWho&busi_data=eyJncm91cENvZGUiOiI5NzU5OTU3MDUiLCJ0b2tlbiI6IjFaRHVKTzFRTWZtVzhuejdYMWdIM0MrUnpabE90anRpVmZrUWo1b3FvSzVMWTdOazRiTnZYNnZYb1VuSUt1R2EiLCJ1aW4iOiIxMDU4MjMzOTUifQ%3D%3D&data=51kQJLmxtwhT3qobZOEDhBSavnoCOlQhKEfBhD0wTahM5Jz4yDJeqbzlGqR833SC1N5PgdZMgnzrShgT94ISDg&svctype=4&tempid=h5_group_info" target="_blank">975995705</a></li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">🛠️ 关于本站</h2>
+            <p>
+                这个网站使用 <strong>Astro</strong> 框架构建，采用了 <a href="https://github.com/CuteLeaf/Firefly" target="_blank">Firefly</a> 模板，Firefly 是基于 <a href="https://github.com/saicaca/fuwari" target="_blank">Fuwari</a> 的二次开发。
+            </p>
+            <p>
+                <strong>Firefly</strong> 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
+            </p>
+            <ul class="link-list">
+                <li>🖥️ 在线预览：<a href="https://firefly.cuteleaf.cn/" target="_blank">Firefly - Demo site</a></li>
+                <li>🏠 我的博客：<a href="https://blog.baka86.love/">https://blog.baka86.love</a></li>
+                <li>📝 Firefly使用文档：<a href="https://docs-firefly.cuteleaf.cn" target="_blank">https://docs-firefly.cuteleaf.cn</a></li>
+                <li>⭐ Firefly开源地址：<a href="https://github.com/CuteLeaf/Firefly" target="_blank">https://github.com/CuteLeaf/Firefly</a></li>
+                <li>⭐ Fuwari开源地址：<a href="https://github.com/saicaca/fuwari" target="_blank">https://github.com/saicaca/fuwari</a></li>
+            </ul>
+        </section>
+
+        <div class="footer-note">
+            <p>感谢你的来访！希望在这里能找到对你有用的内容！</p>
+        </div>
+    </div>
+</MainGridLayout>
+
+<style>
+    .about-page {
+        max-width: 100%;
+    }
+
+    .section {
+        margin-bottom: 2.5rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-title);
+        margin-bottom: 1rem;
+    }
+
+    .intro {
+        font-size: 1.125rem;
+        color: var(--text-content);
+        line-height: 1.8;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-title);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary);
+        display: inline-block;
+    }
+
+    .section-desc {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .sub-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-title);
+        margin: 1.5rem 0 1rem 0;
+    }
+
+    .link-list, .contact-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+    }
+
+    .link-list li, .contact-list li {
+        padding: 0.5rem 0;
+        color: var(--text-content);
+    }
+
+    .link-list a, .contact-list a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .link-list a:hover, .contact-list a:hover {
+        text-decoration: underline;
+    }
+
+    .footer-note {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid var(--line-divider);
+        color: var(--text-secondary);
+        font-style: italic;
+    }
+</style>
