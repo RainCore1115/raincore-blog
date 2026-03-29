@@ -1,11 +1,11 @@
-***
-
+---
 title: baka86bot 音游查分食用教程
 description: "整合4k准度计算器、舞萌DX、Paradigm: Reboot和PJSK查分帮助文档"
-tags: \[bot, 4k, maimai, Paradigm, PJSK, 音游]
+tags: [bot, 4k, maimai, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
-------------
+published: 2026-03-29
+---
 
 # baka86bot 功能使用指南合集
 
