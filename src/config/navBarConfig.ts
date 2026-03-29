@@ -81,6 +81,12 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				external: true,
 				icon: "fa7-brands:qq",
 			},
+			{
+				name: "视奸网站",
+				url: "https://status.baka86.love",
+				external: true,
+				icon: "material-symbols:monitor-heart",
+			},
 		],
 	});
 

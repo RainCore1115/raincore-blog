@@ -43,6 +43,7 @@ import { profileConfig } from "@/config/profileConfig";
 
     #github-activity-feed .gha-feed {
         padding-top: 0;
+        background: transparent !important;
     }
 
     /* 隐藏头部, 页脚, 和空白占位符 */
@@ -51,5 +52,39 @@ import { profileConfig } from "@/config/profileConfig";
     .gha-push,
     .gha-push-small {
         display: none !important;
+    }
+
+    /* 亮色模式样式 */
+    #github-activity-feed .gha-activity {
+        background: var(--card-bg) !important;
+        color: var(--text-content) !important;
+    }
+
+    #github-activity-feed .gha-activity a {
+        color: var(--primary) !important;
+    }
+
+    #github-activity-feed .gha-activity .time {
+        color: var(--text-secondary) !important;
+    }
+
+    /* 暗色模式样式覆盖 */
+    :root.dark #github-activity-feed .gha-feed,
+    :root.dark #github-activity-feed .gha-activity {
+        background: transparent !important;
+        color: var(--text-content) !important;
+    }
+
+    :root.dark #github-activity-feed .gha-activity a {
+        color: var(--primary) !important;
+    }
+
+    :root.dark #github-activity-feed .gha-activity .time {
+        color: var(--text-secondary) !important;
+    }
+
+    /* 确保活动项在暗色模式下正确显示 */
+    :root.dark #github-activity-feed .gha-activity-icon {
+        filter: invert(1);
     }
 </style>

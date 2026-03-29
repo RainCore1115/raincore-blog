@@ -110,7 +110,7 @@
 
     .loading-text, .no-data {
         text-align: center;
-        color: #FFFFFF;
+        color: var(--text-secondary);
         padding: 1rem 0;
         font-size: 0.875rem;
     }
@@ -118,7 +118,7 @@
     .status-card {
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid var(--line-divider);
     }
 
     .status-card:last-child {
@@ -136,15 +136,15 @@
 
     .status-name {
         font-weight: bold;
-        color: #FFFFFF;
+        color: var(--text-title);
     }
 
     .status-indicator {
         font-size: 0.75rem;
         padding: 0.1rem 0.5rem;
         border-radius: var(--radius-full);
-        background-color: rgba(255, 255, 255, 0.2);
-        color: #FFFFFF;
+        background-color: var(--btn-plain-bg-hover);
+        color: var(--text-secondary);
         font-weight: 500;
     }
 
@@ -155,7 +155,7 @@
 
     .status-program {
         font-size: 0.875rem;
-        color: #FFFFFF;
+        color: var(--text-content);
         margin-bottom: 0.25rem;
         white-space: nowrap;
         overflow: hidden;
@@ -164,7 +164,7 @@
 
     .status-time {
         font-size: 0.75rem;
-        color: #FFFFFF;
+        color: var(--text-secondary);
         text-align: right;
     }
 </style>
