@@ -4,6 +4,7 @@ description: "baka86bot 鹿功能娱乐系统使用帮助"
 tags: [bot, 娱乐, 鹿功能, 签到]
 category: bot使用帮助
 draft: false
+published: 2026-03-29
 ---
 
 # baka86bot 娱乐功能说明
