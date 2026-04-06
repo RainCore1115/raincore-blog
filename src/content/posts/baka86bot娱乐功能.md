@@ -1,24 +1,28 @@
----
+***
+
 title: baka86bot 娱乐功能说明
 description: "baka86bot 鹿功能娱乐系统使用帮助"
-tags: [bot, 娱乐, 鹿功能, 签到]
+tags: \[bot, 娱乐, 鹿功能, 签到]
 category: bot使用帮助
 draft: false
 published: 2026-03-29
----
+---------------------
 
 # baka86bot 娱乐功能说明
 
-本文档介绍 baka86bot 的娱乐功能，包括鹿功能签到系统、杯面返还机制等。
+本文档介绍 baka86bot 的娱乐功能，包括鹿功能签到系统、杯面返还机制、KKB互动系统等。
 
----
+***
 
 ## 📑 目录导航
 
-- [🦌 鹿功能说明](#鹿功能说明)
-- [💰 杯面返还机制](#杯面返还机制)
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0;">
+  <a href="#鹿功能说明" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🦌 鹿功能说明</a>
+  <a href="#杯面返还机制" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">💰 杯面返还机制</a>
+  <a href="#kkb互动系统" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">💕 KKB互动系统</a>
+</div>
 
----
+***
 
 <a name="鹿功能说明"></a>
 
@@ -64,7 +68,7 @@ published: 2026-03-29
 
 排行榜每月重置一次。
 
----
+***
 
 <a name="杯面返还机制"></a>
 
@@ -92,10 +96,50 @@ published: 2026-03-29
 | `我的返还日志` | 查看最近10条返还记录        |
 | `我的返还统计` | 查看返还统计信息（总次数、总收益等） |
 
----
+***
+
+<a name="kkb互动系统"></a>
+
+## 💕 KKB互动系统
+
+KKB是一个趣味互动系统，消耗杯面对群友进行"注入生命因子"操作。
+
+### 基础操作
+
+| 命令               | 说明                  |
+| ---------------- | ------------------- |
+| `#kkb @目标`       | 对目标进行 扣扣B 操作（需消耗杯面） |
+| `#kkbinfo [@目标]` | 查询 扣扣B 信息（不填则查询自己）  |
+
+### 保护模式
+
+| 命令               | 说明             |
+| ---------------- | -------------- |
+| `#kkb --on`      | 关闭保护模式，允许被 扣扣B |
+| `#kkb --off`     | 开启保护模式，禁止被 扣扣B |
+| `#kkb --on @用户`  | 允许特定用户对你 扣扣B   |
+| `#kkb --off @用户` | 禁止特定用户对你 KKB   |
+
+### 排行榜
+
+| 命令          | 说明             |
+| ----------- | -------------- |
+| `#kkbtop`   | 被次数排行榜 TOP5    |
+| `#kkbvol`   | 被注入量排行榜 TOP5   |
+| `#kkbmax`   | 单次最大注入排行榜 TOP5 |
+| `#kkbcharm` | 魅力榜 TOP5       |
+
+### 游戏机制
+
+- **消耗杯面**：每次 KKB 需要消耗一定数量的杯面
+- **炸膛风险**：有概率触发炸膛，需要支付修理费才能继续
+- **暴击机制**：有概率触发暴击，注入量翻倍
+- **冷却时间**：切换保护状态有冷却时间限制
+
+***
 
 **[⬆️ 返回顶部](#baka86bot-娱乐功能说明)**
 
----
+***
 
-*文档最后更新时间：2026-03-29*
+*文档最后更新时间：2026-04-06*
