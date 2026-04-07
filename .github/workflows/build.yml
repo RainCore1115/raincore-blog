@@ -25,12 +25,12 @@ jobs:
     name: Astro Check for Node.js ${{ matrix.node }}
     steps:
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.3.0
         with:
           node-version: ${{ matrix.node }} # Use LTS
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -51,12 +51,12 @@ jobs:
     name: Astro Build for Node.js ${{ matrix.node }} # Corrected job name
     steps:
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.3.0
         with:
           node-version: ${{ matrix.node }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
