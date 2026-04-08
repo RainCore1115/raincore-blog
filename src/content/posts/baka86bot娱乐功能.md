@@ -1,5 +1,4 @@
-***
-
+---
 title: baka86bot 娱乐功能说明
 description: "baka86bot 鹿功能娱乐系统使用帮助"
 tags: \[bot, 娱乐, 鹿功能, 签到]
