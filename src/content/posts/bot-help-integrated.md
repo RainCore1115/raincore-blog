@@ -698,51 +698,51 @@ sakura 162993657
 | :--- | :--- |
 | `#phi帮助` | 获取帮助 |
 | `#phi (cn\|gb)?(bind\|绑定)xxx` | 绑定sessionToken，支持国服/国际服，默认为国服 |
-| `#phi (unbind|解绑)` | 删除sessionToken和存档记录 |
+| `#phi (unbind\|解绑)` | 删除sessionToken和存档记录 |
 | `#phi clean` | 删除所有记录 |
-| `#phi (update|更新存档)` | 更新存档 |
-| `#phi (rks|pgr|b30)` | 查询rks，会提供得出的b30结果 |
+| `#phi (update\|更新存档)` | 更新存档 |
+| `#phi (rks\|pgr\|b30)` | 查询rks，会提供得出的b30结果 |
 | `#phi x30` | 查询1Good b30 |
 | `#phi fc30` | 查询Full Combo b30 |
 | `杠批比三零` | 同上 |
-| `#phi info(1|2)?` | 查询个人统计信息 |
+| `#phi info(1\|2)?` | 查询个人统计信息 |
 | `#phi lmtacc [0-100]` | 计算限制最低 ACC 后的 RKS |
-| `#phi (lvsco(re)|scolv) <定数范围> <难度>` | 获取区间成绩 |
-| `#phi chap <章节名称|help>` | 获取章节成绩 |
+| `#phi (lvsco(re)\|scolv) <定数范围> <难度>` | 获取区间成绩 |
+| `#phi chap <章节名称\|help>` | 获取章节成绩 |
 | `#phi ahv <定数>[-v 版本]` | 获取定数成绩表 |
-| `#phi list <-dif 定数范围> <-acc ACC范围> <EZ|HD|IN|AT> <NEW|C|B|A|S|V|FC|PHI>` | 获取区间每首曲目的成绩 |
+| `#phi list <-dif 定数范围> <-acc ACC范围> <EZ\|HD\|IN\|AT> <NEW\|C\|B\|A\|S\|V\|FC\|PHI>` | 获取区间每首曲目的成绩 |
 | `#phi hisb30` | 根据历史记录计算B30变化情况 |
 | `#phi best1(+)` | 查询文字版b30（或更多），最高b99 |
-| `#phi (score|单曲成绩)xxx  [-dif 难度] [-or acc|score|fc|time] [-unrank]` | 获取单曲成绩及这首歌的推分建议，参数为对分数排行的参数，目前仅开启API后有效 |
-| `#phi (suggest|推分)` | 获取可以让RKS+0.01的曲目及其所需ACC |
-| `#phi (ranklist|排行榜) [名次]` | 获取 RKS 排行榜 |
+| `#phi (score\|单曲成绩)xxx  [-dif 难度] [-or acc\|score\|fc\|time] [-unrank]` | 获取单曲成绩及这首歌的推分建议，参数为对分数排行的参数，目前仅开启API后有效 |
+| `#phi (suggest\|推分)` | 获取可以让RKS+0.01的曲目及其所需ACC |
+| `#phi (ranklist\|排行榜) [名次]` | 获取 RKS 排行榜 |
 | `#phi rankfind <rks>` | 获取有多少人大于查询 RKS |
 | `#phi data` | 获取用户data数量 |
-| `#phi (guess|猜曲绘)` | 猜曲绘，回答无特殊命令，直接回复，如果不是曲名就不会说话，如果是不正确的曲名会回复。#ans 结束 |
-| `#phi (ltr|开字母)` | 根据字母猜曲名，#出/#open... 开指定的字母，#第n个/#nX.xxx 进行回答，#ans 获取答案 |
-| `#phi (tipgame|提示猜曲)` | 根据提示猜曲名，#tip获得下一条提示，#ans 获取答案，回答直接回复 |
-| `#phi (song|曲) xxx` | 查询phigros中某一曲目的图鉴，支持设定别名 |
+| `#phi (guess\|猜曲绘)` | 猜曲绘，回答无特殊命令，直接回复，如果不是曲名就不会说话，如果是不正确的曲名会回复。#ans 结束 |
+| `#phi (ltr\|开字母)` | 根据字母猜曲名，#出/#open... 开指定的字母，#第n个/#nX.xxx 进行回答，#ans 获取答案 |
+| `#phi (tipgame\|提示猜曲)` | 根据提示猜曲名，#tip获得下一条提示，#ans 获取答案，回答直接回复 |
+| `#phi (song\|曲) xxx` | 查询phigros中某一曲目的图鉴，支持设定别名 |
 | `#phi chart <曲名> [难度=IN]` | 查询phigros中某一谱面的详细信息 |
 | `#phi tag <曲名> [难度=IN] <标签>` | 查看谱面标签，标签可选项见回复说明，难度默认为IN |
 | `#phi settag <曲名> [难度=IN] <标签>` | 给谱面打标签，推荐先使用/tag查询标签列表，难度默认为IN |
-| `#phi (comment|cmt|评论|评价) <曲名> [难度=IN](换行)<内容>` | 评论曲目，难度默认为IN |
+| `#phi (comment\|cmt\|评论\|评价) <曲名> [难度=IN](换行)<内容>` | 评论曲目，难度默认为IN |
 | `#phi recmt <评论ID>` | 查看并确认是否删评，仅发送者和主人权限，需要二次确认 |
 | `#phi mycmt` | 查看自己的云端评论 |
-| `#phi (table|定数表) <定数>` | 查询phigros定数表 |
+| `#phi (table\|定数表) <定数>` | 查询phigros定数表 |
 | `#phi new` | 查询更新的曲目 |
 | `#phi tips` | 随机tips |
 | `#phi jrrp` | 今日人品 |
 | `#phi alias xxx` | 查询某一曲目的别名 |
-| `#phi (rand|随机) [定数] [难度]` | 根据条件随机曲目，条件支持难度、定数，难度可以多选，定数以-作为分隔 |
+| `#phi (rand\|随机) [定数] [难度]` | 根据条件随机曲目，条件支持难度、定数，难度可以多选，定数以-作为分隔 |
 | `#phi randclg [课题总值] [难度] ([曲目定数范围])` | 随机课题 eg: /rand 40 (IN 13-15) |
-| `#phi (曲绘|ill|Ill) xxx` | 查询phigros中某一曲目的曲绘 |
-| `#phi (search|查询|检索) <条件 值>` | 检索曲库中的曲目，支持BPM 定数 物量，条件 bpm dif cmb，值可以为区间，以 - 间隔 |
-| `#phi (theme|主题) [0-2]` | 切换绘图主题，仅对 b30, update, randclg, sign, task 生效 |
-| `#phi (myset|个人设置)` | 查看和修改用户设置，参数为设置项名称，值支持使用序号选择，建议先查看设置项列表 |
+| `#phi (曲绘\|ill\|Ill) xxx` | 查询phigros中某一曲目的曲绘 |
+| `#phi (search\|查询\|检索) <条件 值>` | 检索曲库中的曲目，支持BPM 定数 物量，条件 bpm dif cmb，值可以为区间，以 - 间隔 |
+| `#phi (theme\|主题) [0-2]` | 切换绘图主题，仅对 b30, update, randclg, sign, task 生效 |
+| `#phi (myset\|个人设置)` | 查看和修改用户设置，参数为设置项名称，值支持使用序号选择，建议先查看设置项列表 |
 | `sign/签到` | 签到获取Notes |
 | `task/我的任务` | 查看自己的任务 |
 | `retask/刷新任务` | 刷新任务，需要花费20Notes |
-| `#phi (send|送|转) <目标> <数量>` | 送给目标Note，支持@或QQ号 |
+| `#phi (send\|送\|转) <目标> <数量>` | 送给目标Note，支持@或QQ号 |
 
 ***
 
