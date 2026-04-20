@@ -121,9 +121,9 @@ const size = config.size || { width: 280, height: 250 };
       const clampedX = Math.max(0, Math.min(newX, maxX));
       const clampedY = Math.max(0, Math.min(newY, maxY));
 
-      container.style.left = clampedX + "px";
+      container.style.left = `${clampedX}px`;
       container.style.right = "auto";
-      container.style.top = clampedY + "px";
+      container.style.top = `${clampedY}px`;
       container.style.bottom = "auto";
     });
 
@@ -164,9 +164,9 @@ const size = config.size || { width: 280, height: 250 };
       const clampedX = Math.max(0, Math.min(newX, maxX));
       const clampedY = Math.max(0, Math.min(newY, maxY));
 
-      container.style.left = clampedX + "px";
+      container.style.left = `${clampedX}px`;
       container.style.right = "auto";
-      container.style.top = clampedY + "px";
+      container.style.top = `${clampedY}px`;
       container.style.bottom = "auto";
 
       e.preventDefault();
@@ -186,11 +186,11 @@ const size = config.size || { width: 280, height: 250 };
       const maxY = window.innerHeight - container.offsetHeight;
 
       if (rect.left > maxX) {
-        container.style.left = maxX + "px";
+        container.style.left = `${maxX}px`;
         container.style.right = "auto";
       }
       if (rect.top > maxY) {
-        container.style.top = maxY + "px";
+        container.style.top = `${maxY}px`;
         container.style.bottom = "auto";
       }
     });

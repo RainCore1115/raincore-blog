@@ -39,7 +39,8 @@ export const friendsConfig: FriendLink[] = [
 	},
 	{
 		title: "皮梦 の 茶馆",
-		imgurl: "http://thirdqq.qlogo.cn/ek_qqapp/AQBYdE3HOBBJWzCia3BjOePcJ5icmcwpTW0cEWXlZsib48hLvjwq5KYMmdBlpKtRB3cqt3Kmgfb5v69WGKRvB3Q6av6EV7Jfmc9n5SK9ZRxnAchmKJBILw/100",
+		imgurl:
+			"http://thirdqq.qlogo.cn/ek_qqapp/AQBYdE3HOBBJWzCia3BjOePcJ5icmcwpTW0cEWXlZsib48hLvjwq5KYMmdBlpKtRB3cqt3Kmgfb5v69WGKRvB3Q6av6EV7Jfmc9n5SK9ZRxnAchmKJBILw/100",
 		desc: "杂鱼皮梦的博客",
 		siteurl: "https://blog.07210700.xyz",
 		tags: ["Blog"],
@@ -48,7 +49,8 @@ export const friendsConfig: FriendLink[] = [
 	},
 	{
 		title: "Milk's Blog",
-		imgurl: "https://upload.awmc.cc/uploads/20260330/c095b9df52d0c466ee38bdf202262176.png",
+		imgurl:
+			"https://upload.awmc.cc/uploads/20260330/c095b9df52d0c466ee38bdf202262176.png",
 		desc: "喵喵咕噜咕噜～",
 		siteurl: "https://blog.awmc.cc",
 		tags: ["Blog"],
@@ -57,7 +59,8 @@ export const friendsConfig: FriendLink[] = [
 	},
 	{
 		title: "AWMC BBS",
-		imgurl: "https://upload.awmc.cc/uploads/20260330/c095b9df52d0c466ee38bdf202262176.png",
+		imgurl:
+			"https://upload.awmc.cc/uploads/20260330/c095b9df52d0c466ee38bdf202262176.png",
 		desc: "awmc论坛",
 		siteurl: "https://awmc.cc",
 		tags: ["Discussion"],

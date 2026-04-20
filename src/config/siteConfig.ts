@@ -20,14 +20,7 @@ export const siteConfig: SiteConfig = {
 		"雨核的个人博客，记录开发进度、技术分享与和SoupIsWater交往的点滴。一个音乐创作者、开源爱好者、开发者与音游爱好者的个人空间。",
 
 	// 站点关键词
-	keywords: [
-		"RainCore",
-		"雨核",
-		"博客",
-		"技术博客",
-		"开发",
-		"静态博客",
-	],
+	keywords: ["RainCore", "雨核", "博客", "技术博客", "开发", "静态博客"],
 
 	// 主题色
 	themeColor: {

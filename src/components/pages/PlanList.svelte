@@ -1,82 +1,82 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import type { PlanItem, PlanStatus } from '@/types/plan';
-    import { planConfig } from '@/config/planConfig';
+import { onMount } from "svelte";
+import { planConfig } from "@/config/planConfig";
+import type { PlanItem, PlanStatus } from "@/types/plan";
 
-    let plans: PlanItem[] = [];
-    let activeFilter: PlanStatus | 'all' = 'all';
-    let likeData: Record<string, number> = {};
+let plans: PlanItem[] = [];
+let activeFilter: PlanStatus | "all" = "all";
+let likeData: Record<string, number> = {};
 
-    onMount(() => {
-        plans = [...planConfig.plans].sort((a, b) => 
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        
-        const stored = localStorage.getItem('plan-likes');
-        if (stored) {
-            likeData = JSON.parse(stored);
-            plans = plans.map(p => ({
-                ...p,
-                likes: likeData[p.id] ?? p.likes
-            }));
-        }
-    });
+onMount(() => {
+	plans = [...planConfig.plans].sort(
+		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+	);
 
-    function filterPlans(status: PlanStatus | 'all') {
-        activeFilter = status;
-    }
+	const stored = localStorage.getItem("plan-likes");
+	if (stored) {
+		likeData = JSON.parse(stored);
+		plans = plans.map((p) => ({
+			...p,
+			likes: likeData[p.id] ?? p.likes,
+		}));
+	}
+});
 
-    function getFilteredPlans() {
-        if (activeFilter === 'all') return plans;
-        return plans.filter(p => p.status === activeFilter);
-    }
+function filterPlans(status: PlanStatus | "all") {
+	activeFilter = status;
+}
 
-    function getStatusLabel(status: PlanStatus): string {
-        const labels: Record<PlanStatus, string> = {
-            completed: '已完成',
-            in_progress: '施工中',
-            planned: '画饼中'
-        };
-        return labels[status];
-    }
+function getFilteredPlans() {
+	if (activeFilter === "all") return plans;
+	return plans.filter((p) => p.status === activeFilter);
+}
 
-    function getStatusColor(status: PlanStatus): string {
-        const colors: Record<PlanStatus, string> = {
-            completed: '#22c55e',
-            in_progress: '#f59e0b',
-            planned: '#6b7280'
-        };
-        return colors[status];
-    }
+function getStatusLabel(status: PlanStatus): string {
+	const labels: Record<PlanStatus, string> = {
+		completed: "已完成",
+		in_progress: "施工中",
+		planned: "画饼中",
+	};
+	return labels[status];
+}
 
-    function formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString('zh-CN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
+function getStatusColor(status: PlanStatus): string {
+	const colors: Record<PlanStatus, string> = {
+		completed: "#22c55e",
+		in_progress: "#f59e0b",
+		planned: "#6b7280",
+	};
+	return colors[status];
+}
 
-    function likePlan(id: string) {
-        const liked = localStorage.getItem(`plan-liked-${id}`);
-        if (liked) return;
+function formatDate(dateStr: string): string {
+	return new Date(dateStr).toLocaleDateString("zh-CN", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+}
 
-        plans = plans.map(p => {
-            if (p.id === id) {
-                const newLikes = p.likes + 1;
-                likeData[id] = newLikes;
-                return { ...p, likes: newLikes };
-            }
-            return p;
-        });
+function likePlan(id: string) {
+	const liked = localStorage.getItem(`plan-liked-${id}`);
+	if (liked) return;
 
-        localStorage.setItem(`plan-liked-${id}`, 'true');
-        localStorage.setItem('plan-likes', JSON.stringify(likeData));
-    }
+	plans = plans.map((p) => {
+		if (p.id === id) {
+			const newLikes = p.likes + 1;
+			likeData[id] = newLikes;
+			return { ...p, likes: newLikes };
+		}
+		return p;
+	});
 
-    function isLiked(id: string): boolean {
-        return localStorage.getItem(`plan-liked-${id}`) === 'true';
-    }
+	localStorage.setItem(`plan-liked-${id}`, "true");
+	localStorage.setItem("plan-likes", JSON.stringify(likeData));
+}
+
+function isLiked(id: string): boolean {
+	return localStorage.getItem(`plan-liked-${id}`) === "true";
+}
 </script>
 
 <div class="plan-container">

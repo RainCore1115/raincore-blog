@@ -1,46 +1,48 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+import { onMount } from "svelte";
 
-    export let username: string;
-    export let type: 'user' | 'org' = 'user';
+export let username: string;
+export let type: "user" | "org" = "user";
 
-    interface Repo {
-        name: string;
-        full_name: string;
-        description: string;
-        html_url: string;
-        stargazers_count: number;
-        forks_count: number;
-        language: string;
-        owner: {
-            avatar_url: string;
-            login: string;
-        };
-    }
+interface Repo {
+	name: string;
+	full_name: string;
+	description: string;
+	html_url: string;
+	stargazers_count: number;
+	forks_count: number;
+	language: string;
+	owner: {
+		avatar_url: string;
+		login: string;
+	};
+}
 
-    let repos: Repo[] = [];
-    let loading = true;
-    let error = false;
+let repos: Repo[] = [];
+let loading = true;
+let error = false;
 
-    onMount(async () => {
-        try {
-            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=10`);
-            if (!response.ok) throw new Error('Failed to fetch');
-            repos = await response.json();
-        } catch (e) {
-            console.error('Error fetching repos:', e);
-            error = true;
-        } finally {
-            loading = false;
-        }
-    });
+onMount(async () => {
+	try {
+		const response = await fetch(
+			`https://api.github.com/users/${username}/repos?sort=updated&per_page=10`,
+		);
+		if (!response.ok) throw new Error("Failed to fetch");
+		repos = await response.json();
+	} catch (e) {
+		console.error("Error fetching repos:", e);
+		error = true;
+	} finally {
+		loading = false;
+	}
+});
 
-    function formatNumber(num: number): string {
-        if (num >= 1000) {
-            return (num / 1000).toFixed(1) + 'K';
-        }
-        return num.toString();
-    }
+function formatNumber(num: number): string {
+	if (num >= 1000) {
+		return `${(num / 1000).toFixed(1)}K`;
+	}
+	return num.toString();
+}
 </script>
 
 <div class="github-repos">

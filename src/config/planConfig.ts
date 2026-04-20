@@ -5,7 +5,8 @@ export const planConfig: PlanConfig = {
 		{
 			id: "1",
 			title: "博客系统搭建",
-			description: "基于 Astro + Firefly 主题搭建个人博客，完成基础配置和个性化定制",
+			description:
+				"基于 Astro + Firefly 主题搭建个人博客，完成基础配置和个性化定制",
 			status: "completed",
 			createdAt: "2026-03-01",
 			updatedAt: "2026-03-28",

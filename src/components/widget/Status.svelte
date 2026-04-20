@@ -1,66 +1,70 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+import { onMount } from "svelte";
 
-    interface StatusData {
-        machine: string;
-        window_title: string;
-        app: string | null;
-        access_time: string;
-    }
+interface StatusData {
+	machine: string;
+	window_title: string;
+	app: string | null;
+	access_time: string;
+}
 
-    let pcStatus: StatusData | null = null;
-    let phoneStatus: StatusData | null = null;
-    let loading = true;
+let pcStatus: StatusData | null = null;
+let phoneStatus: StatusData | null = null;
+let loading = true;
 
-    onMount(async () => {
-        await fetchStatus();
-    });
+onMount(async () => {
+	await fetchStatus();
+});
 
-    async function fetchStatus() {
-        loading = true;
-        try {
-            const timestamp = Date.now();
-            const [pcResponse, phoneResponse] = await Promise.all([
-                fetch(`https://status.baka86.love/api/current-status?machine=raincore-pc&limit=1&_t=${timestamp}`),
-                fetch(`https://status.baka86.love/api/current-status?machine=raincore-phone&limit=1&_t=${timestamp}`)
-            ]);
+async function fetchStatus() {
+	loading = true;
+	try {
+		const timestamp = Date.now();
+		const [pcResponse, phoneResponse] = await Promise.all([
+			fetch(
+				`https://status.baka86.love/api/current-status?machine=raincore-pc&limit=1&_t=${timestamp}`,
+			),
+			fetch(
+				`https://status.baka86.love/api/current-status?machine=raincore-phone&limit=1&_t=${timestamp}`,
+			),
+		]);
 
-            const pcData = await pcResponse.json();
-            const phoneData = await phoneResponse.json();
+		const pcData = await pcResponse.json();
+		const phoneData = await phoneResponse.json();
 
-            if (pcData && pcData.length > 0) {
-                pcStatus = pcData[0];
-            }
-            if (phoneData && phoneData.length > 0) {
-                phoneStatus = phoneData[0];
-            }
-        } catch (error) {
-            console.error('Error fetching status data:', error);
-        } finally {
-            loading = false;
-        }
-    }
+		if (pcData && pcData.length > 0) {
+			pcStatus = pcData[0];
+		}
+		if (phoneData && phoneData.length > 0) {
+			phoneStatus = phoneData[0];
+		}
+	} catch (error) {
+		console.error("Error fetching status data:", error);
+	} finally {
+		loading = false;
+	}
+}
 
-    function formatTime(time: string | undefined): string {
-        if (!time) return 'N/A';
-        const date = new Date(time);
-        return date.toLocaleTimeString('zh-CN', { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit', 
-            hour12: false 
-        });
-    }
+function formatTime(time: string | undefined): string {
+	if (!time) return "N/A";
+	const date = new Date(time);
+	return date.toLocaleTimeString("zh-CN", {
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: false,
+	});
+}
 
-    function isOnline(accessTime: string): boolean {
-        const lastSeen = new Date(accessTime).getTime();
-        const now = Date.now();
-        return (now - lastSeen) < 5 * 60 * 1000;
-    }
+function isOnline(accessTime: string): boolean {
+	const lastSeen = new Date(accessTime).getTime();
+	const now = Date.now();
+	return now - lastSeen < 5 * 60 * 1000;
+}
 
-    function getDisplayName(machine: string): string {
-        return machine === 'raincore-pc' ? '雨核的电脑' : '雨核的手机';
-    }
+function getDisplayName(machine: string): string {
+	return machine === "raincore-pc" ? "雨核的电脑" : "雨核的手机";
+}
 </script>
 
 <div class="status-widget">

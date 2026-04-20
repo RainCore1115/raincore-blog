@@ -165,8 +165,8 @@
       }
 
       // 设置位置
-      messageContainer.style.left = messageX + "px";
-      messageContainer.style.top = messageY + "px";
+      messageContainer.style.left = `${messageX}px`;
+      messageContainer.style.top = `${messageY}px`;
 
       // 在消息框渲染后，进行精确的边界调整
       setTimeout(() => {
@@ -250,8 +250,8 @@
         }
 
         // 应用调整后的位置
-        messageContainer.style.left = adjustedX + "px";
-        messageContainer.style.top = adjustedY + "px";
+        messageContainer.style.left = `${adjustedX}px`;
+        messageContainer.style.top = `${adjustedY}px`;
       }, 50); // 增加延迟确保消息框完全渲染
     }
 
