@@ -1,0 +1,42 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import PlanList from "@/components/pages/PlanList.svelte";
+import { siteConfig } from "@/config/siteConfig";
+import { i18n } from "@/i18n/translation";
+
+const title = "我的计划";
+const subtitle = "记录开发进度与未来规划";
+---
+
+<MainGridLayout title={title} description={subtitle}>
+    <div class="plan-page">
+        <div class="page-header">
+            <h1 class="page-title">{title}</h1>
+            <p class="page-subtitle">{subtitle}</p>
+        </div>
+        <PlanList client:load />
+    </div>
+</MainGridLayout>
+
+<style>
+    .plan-page {
+        width: 100%;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-title);
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+</style>
