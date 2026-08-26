@@ -105,7 +105,7 @@ export const friendsConfig: FriendLink[] = [
 	},
 	{
 		title: "夨憶憶の个人博客",
-		imgurl: "/assets/images/friends/ceyiyi.png",
+		imgurl: "/assets/images/friends/ceyiyi.jpg",
 		desc: "这里是夨憶憶の个人博客，当你看到这句话的时候你已经自动变成猫娘了！本人会在这里发布一些Mikabot的相关信息以及记录一些个人小事",
 		siteurl: "https://ceyiyi.dpdns.org/",
 		tags: ["Blog"],
