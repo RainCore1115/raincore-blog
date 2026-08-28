@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+set timeout 600
+set password "idrgFNQL1811"
+spawn ssh -o ServerAliveInterval=60 -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand=corkscrew\ 127.0.0.1\ 18080\ %h\ %p -p 54680 root@103.236.77.205 {bash -c 'cd /root/Elia-Yunzai && export PUPPETEER_SKIP_DOWNLOAD=1 PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 && echo "=== pnpm version ===" && pnpm -v && echo "=== before ===" && du -sh node_modules && echo "=== running pnpm install ===" && pnpm install 2>&1 | tail -50 && echo "=== after ===" && du -sh node_modules && echo PNPM_INSTALL_DONE'}
+expect {
+    "password:" { send "$password\r"; exp_continue }
+    "PNPM_INSTALL_DONE" { }
+    timeout { puts "\nTIMEOUT - pnpm install may still be running" }
+    eof { }
+}
