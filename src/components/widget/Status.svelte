@@ -12,12 +12,18 @@ interface Activity {
 	app?: string | null;
 	access_time?: string | null;
 	privacy_mode?: boolean;
+	// 部分客户端会把设备信息放在 activity.extra，作为 device 的兜底
+	extra?: DeviceInfo | null;
 }
 
+// 设备上报的 device 结构（示例见 machine=52f6bbf25328d361）：
+// { battery: { level, charging }, network: { wifi, type }, screen: { on }, os, client_version }
 interface DeviceInfo {
-	battery?: { level?: number | null; charging?: boolean };
-	network?: { wifi?: boolean; type?: string };
-	screen?: { on?: boolean };
+	battery?: { level?: number | null; charging?: boolean } | null;
+	network?: { wifi?: boolean; type?: string } | null;
+	screen?: { on?: boolean } | null;
+	os?: string | null;
+	client_version?: string | null;
 }
 
 interface MediaData {
@@ -166,20 +172,37 @@ function getMediaText(data: StatusData | null): string | null {
 }
 
 function getDeviceText(data: StatusData | null): string | null {
-	const device = data?.device;
-	if (!device) return null;
+	// device 缺失时回退到 activity.extra（与 bot 插件一致）
+	const device = data?.device || data?.activity?.extra || null;
+	if (!device || typeof device !== "object") return null;
+
 	const parts: string[] = [];
-	if (device.battery) {
+
+	// 电量：level 为空或负数时显示 --
+	if (device.battery && typeof device.battery === "object") {
 		const level = device.battery.level;
 		const levelText = level === null || level === undefined || level < 0 ? "--" : `${level}%`;
 		parts.push(`🔋${levelText}${device.battery.charging ? "（充电中）" : ""}`);
 	}
-	if (device.network) {
-		parts.push(`📶${device.network.type || (device.network.wifi ? "WLAN" : "移动网络")}`);
+
+	// 网络：优先用上报的 type，缺失时按 wifi 布尔值兜底
+	if (device.network && typeof device.network === "object") {
+		const type = (device.network.type || "").trim();
+		parts.push(`📶${type || (device.network.wifi ? "WLAN" : "移动网络")}`);
 	}
-	if (device.screen) {
+
+	// 亮屏 / 息屏
+	if (device.screen && typeof device.screen === "object") {
 		parts.push(device.screen.on ? "💡亮屏" : "🌙息屏");
 	}
+
+	// 系统与客户端版本（放最后，窄屏时优先被省略号截断）
+	const os = (device.os || "").trim();
+	const version = (device.client_version || "").trim();
+	if (os || version) {
+		parts.push(`${os}${os && version ? " " : ""}${version}`.trim());
+	}
+
 	return parts.length ? parts.join(" | ") : null;
 }
 </script>
