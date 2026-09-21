@@ -5,11 +5,12 @@ tags: [bot, 协议, 使用条款]
 category: bot使用帮助
 draft: false
 published: 2026-04-05
+updated: 2026-09-21
 ---
 
 # Bot 用户使用协议
 
-**最后更新日期：** 2026-04-05
+**最后更新日期：** 2026-09-21
 
 欢迎使用本 Bot（以下简称"本服务"）。  
 通过使用本 Bot，即表示您同意遵守本协议的全部内容。如果您不同意，请立即停止使用。
@@ -130,76 +131,15 @@ Bot 主有权适时修改本协议。修改后的协议将在 Bot 公告或相�
 
 ---
 
-## 八、验证解锁
+## 八、入群申请
 
-为了解锁 Bot 的所有功能，请完成以下验证步骤：
+如需在其他群聊启用 Bot，请按以下流程办理：
 
-1. 复制下方验证指令
-2. 发送到 Bot 官方群：**975995705**
+1. 将本协议**分发给目标群的全体管理员**，确保每位管理员均已知悉本协议内容
+2. 待**全体管理员同意**本协议后
+3. 由任意一位管理员向 Bot 主 QQ **105823395** 发送消息，申请批准 Bot 入群
 
-<div class="verify-code-box">
-  <code class="verify-code">/verify baka86.love</code>
-  <button class="copy-btn" onclick="navigator.clipboard.writeText('我要进入灰天堂').then(() => this.textContent = '已复制!').catch(() => this.textContent = '复制失败')">
-    复制
-  </button>
-</div>
-
-### 在其他群聊启用 Bot
-
-如需在其他群聊启用 Bot，请该群管理员在官群发送以下指令（将 `群号` 替换为目标群号）：
-
-<div class="verify-code-box">
-  <code class="verify-code">/verify group 群号</code>
-  <button class="copy-btn" onclick="navigator.clipboard.writeText('/verify group ').then(() => this.textContent = '已复制!').catch(() => this.textContent = '复制失败')">
-    复制
-  </button>
-</div>
-
-**使用示例**：`/verify group 123456789`
-
-<style>
-  .verify-code-box {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 20px;
-    background: var(--card-bg, #f5f5f5);
-    border: 1px solid var(--line-and-border, #e0e0e0);
-    border-radius: 12px;
-    margin: 16px 0;
-  }
-  .verify-code {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: var(--primary, #3b82f6);
-    background: transparent;
-    padding: 0;
-  }
-  .copy-btn {
-    padding: 8px 16px;
-    background: var(--primary, #3b82f6);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  .copy-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-  .copy-btn:active {
-    transform: translateY(0);
-  }
-  @media (prefers-color-scheme: dark) {
-    .verify-code-box {
-      background: var(--card-bg, #1f2937);
-      border-color: var(--line-and-border, #374151);
-    }
-  }
-</style>
+Bot 主收到申请并核实后，将批准 Bot 加入该群。未经上述流程擅自拉群，可能被拒绝服务或移出群聊。
 
 ---
 
@@ -207,4 +147,4 @@ Bot 主有权适时修改本协议。修改后的协议将在 Bot 公告或相�
 
 ---
 
-*文档最后更新时间：2026-04-05*
+*文档最后更新时间：2026-09-21*
