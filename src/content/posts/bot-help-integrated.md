@@ -1,10 +1,11 @@
 ---
 title: baka86bot 音游查分食用教程
-description: "整合4k准度计算器、舞萌DX（含相对旧版插件的新增说明）、Paradigm: Reboot和PJSK查分帮助文档"
-tags: [bot, 4k, maimai, Paradigm, PJSK, 音游]
+description: "整合4K准度计算器、舞萌DX、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
+tags: [bot, 4k, maimai, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
 published: 2026-04-24
+updated: 2026-09-20
 ---
 
 # baka86bot 功能使用指南合集
@@ -22,6 +23,8 @@ published: 2026-04-24
 | **Paradigm: Reboot** | Paradigm: Reboot Prober插件使用帮助 | [点击跳转](#paradigm-reboot) |
 |       **PJSK**       | Project Sekai机器人帮助文档          |     [点击跳转](#pjsk机器人)     |
 |       **Phigros**     | Phi插件使用帮助                    |     [点击跳转](#phigros)     |
+|       **Rizline**     | Rizline（riz-plugin）插件使用帮助      |     [点击跳转](#rizline)     |
+|      **CHUNITHM**    | CHUNITHM（中二节奏）插件使用帮助          |    [点击跳转](#chunithm)    |
 
 ***
 
@@ -287,21 +290,74 @@ published: 2026-04-24
 
 <a name="paradigm-reboot"></a>
 
-#  Paradigm: Reboot Prober 插件使用帮助
+#  Paradigm: Reboot Prober 插件使用帮助
 
-## Paradigm: Reboot Prober - 基础功能
+> 当前安装的是 **API v2 适配版**（接口基址默认 `https://api.prp.icel.site/api/v2`）。所有命令统一使用**小写 `prp` 前缀、命令与参数之间用空格分隔，且不需要 `#`**，例如 `prp bind`、`prp b50`。旧版 `prp-bind`、`prp-b50` 写法在本版本中**不再识别**；前缀区分大小写。
 
-| 指令           | 别名  | 可选参数                                | 所需权限 | 用法                                             | 使用说明                                                                   |
-| :----------- | :-- | :---------------------------------- | :--- | :--------------------------------------------- | :--------------------------------------------------------------------- |
-| `ping`       | (无) | (无)                                 | (无)  | `ping`                                         | <br />                                                                 |
-| `prp-bind`   | (无) | `<username> <password>`             | (无)  | `prp-bind <username> <password>`               | 登录你的[https://prp.icel.site/#/best50账号](https://prp.icel.site/#/best50) |
-| `prp-unbind` | (无) | (无)                                 | (无)  | `prp-unbind`                                   | <br />                                                                 |
-| `prp-whoami` | (无) | (无)                                 | (无)  | `prp-whoami`                                   | 查看你当前绑定的是什么账号                                                          |
-| `prp-b50`    | (无) | (无)                                 | (无)  | `prp-b50`                                      | <br />                                                                 |
-| `prp-song`   | (无) | `<song_title>`                      | (无)  | `prp-song <song_title>`                        | <br />                                                                 |
-| `prp-submit` | (无) | `<song_title> <difficulty> <score>` | (无)  | `prp-submit <song_title> <difficulty> <score>` | 提交你的成绩到查分器                                                             |
-| `prp-stats`  | (无) | (无)                                 | (无)  | `prp-stats`                                    | 查看rating变化曲线图                                                          |
-| `来一首范曲`      | (无) | (无)                                 | (无)  | `来一首范曲`                                        | <br />                                                                 |
+## Paradigm: Reboot Prober - 绑定与账号
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `prp bind <用户名> [令牌]` | 无 | 用户名必填，令牌可选 | 无 | 将当前 QQ 绑定到 Prober 账号。**只需用户名，不需要密码**；插件只校验用户名是否存在并保存映射。带令牌时会自动识别类型（见下）。 |
+| `prp unbind` | 无 | 无 | 无 | 解绑当前 QQ，删除绑定记录。 |
+| `prp whoami` | 无 | 无 | 无 | 查看当前绑定的用户名与凭据类型。 |
+
+绑定示例：
+
+```
+prp bind raincore1115
+prp b50
+```
+
+读取成绩依赖目标账号的**匿名查询（`anonymous_probe`）**开关：已开启可直接读取；未开启会提示“该账号未开启匿名查询”，此时需要带凭据绑定。
+
+带凭据绑定（可选，用于私有账号或上传成绩）：
+
+| 令牌类型 | 作用 | 有效期 |
+| :--- | :--- | :--- |
+| `refresh_token` | 读取 + 上传 | 长期有效（推荐） |
+| `access_token` | 读取 + 上传 | 约 30 分钟 |
+| `upload_token` | 仅上传成绩，不能读取 B50 | 以平台为准 |
+
+- 插件会自动识别令牌：三段点分的是 JWT，纯十六进制的是 `upload_token`。
+- 遇到 `401` 时会用 `refresh_token` 自动续期并重试一次。
+
+**免绑定查询公开账号**：`prp b50 <用户名>`、`prp stats <用户名>` 无需绑定，对方开启匿名查询即可。
+
+## Paradigm: Reboot Prober - 成绩查询
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `prp b50 [用户名]` | 无 | 可选用户名 | 无 | 查询并渲染 Best 50（Current B15 + Past B35）图片。不带用户名查自己，带用户名免绑查询对方公开账号。 |
+| `prp stats [用户名]` | 无 | 可选用户名 | 无 | 查询 B50 平均 Rating 的本地累积趋势图。没有历史时请先发一次 `prp b50`。 |
+
+## Paradigm: Reboot Prober - 曲目信息
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `prp song <曲名>` | 无 | 曲名必填 | 无 | 查询单曲信息图（封面、BPM、曲包、各难度谱面等）。 |
+| `prp random` | 无 | 无 | 无 | 随机抽取一首范曲并发送歌曲信息图。 |
+
+## Paradigm: Reboot Prober - 成绩上传
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `prp submit <曲名> <难度> <分数>` | 无 | 曲名、难度、分数（0~1010000） | 无 | 向绑定账号上传单条成绩，需已绑定且具备可用凭据。 |
+
+难度可选值与别名（不区分大小写）：
+
+| 难度 | 别名 |
+| :--- | :--- |
+| `detected` | `d`、`dt` |
+| `invaded` | `i`、`in` |
+| `massive` | `m`、`ms` |
+| `reboot` | `r`、`rb` |
+
+## Paradigm: Reboot Prober - 其他
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `prp ping` | 无 | 无 | 无 | 测试插件是否存活，回复 `pong`。 |
 
 ***
 
@@ -740,59 +796,226 @@ sakura 162993657
 
 <a name="phigros"></a>
 
-#  Phi插件使用帮助
+#  Phi插件使用帮助
 
-## Phi - 基础功能
+> 命令前缀为 **`#phi`**（用 `/phi` 亦可），例如 `#phi b30`、`#phi绑定`。插件自带帮助图会把前缀渲染成 `/phi xxx`，实际发送时 `#` 与 `/` 都能识别。发送 `#phi帮助`（或 `#pgr帮助`）可查看自助菜单。
+
+## Phi - 绑定与存档
 
 | 指令 | 说明 |
 | :--- | :--- |
-| `#phi帮助` | 获取帮助 |
-| `#phi (cn\|gb)?(bind\|绑定)xxx` | 绑定sessionToken，支持国服/国际服，默认为国服 |
-| `#phi (unbind\|解绑)` | 删除sessionToken和存档记录 |
-| `#phi clean` | 删除所有记录 |
-| `#phi (update\|更新存档)` | 更新存档 |
-| `#phi (rks\|pgr\|b30)` | 查询rks，会提供得出的b30结果 |
-| `#phi x30` | 查询1Good b30 |
-| `#phi fc30` | 查询Full Combo b30 |
-| `杠批比三零` | 同上 |
-| `#phi info(1\|2)?` | 查询个人统计信息 |
-| `#phi lmtacc [0-100]` | 计算限制最低 ACC 后的 RKS |
-| `#phi (lvsco(re)\|scolv) <定数范围> <难度>` | 获取区间成绩 |
-| `#phi chap <章节名称\|help>` | 获取章节成绩 |
-| `#phi ahv <定数>[-v 版本]` | 获取定数成绩表 |
-| `#phi list <-dif 定数范围> <-acc ACC范围> <EZ\|HD\|IN\|AT> <NEW\|C\|B\|A\|S\|V\|FC\|PHI>` | 获取区间每首曲目的成绩 |
-| `#phi hisb30` | 根据历史记录计算B30变化情况 |
-| `#phi best1(+)` | 查询文字版b30（或更多），最高b99 |
-| `#phi (score\|单曲成绩)xxx  [-dif 难度] [-or acc\|score\|fc\|time] [-unrank]` | 获取单曲成绩及这首歌的推分建议，参数为对分数排行的参数，目前仅开启API后有效 |
-| `#phi (suggest\|推分)` | 获取可以让RKS+0.01的曲目及其所需ACC |
-| `#phi (ranklist\|排行榜) [名次]` | 获取 RKS 排行榜 |
-| `#phi rankfind <rks>` | 获取有多少人大于查询 RKS |
-| `#phi data` | 获取用户data数量 |
-| `#phi (guess\|猜曲绘)` | 猜曲绘，回答无特殊命令，直接回复，如果不是曲名就不会说话，如果是不正确的曲名会回复。#ans 结束 |
-| `#phi (ltr\|开字母)` | 根据字母猜曲名，#出/#open... 开指定的字母，#第n个/#nX.xxx 进行回答，#ans 获取答案 |
-| `#phi (tipgame\|提示猜曲)` | 根据提示猜曲名，#tip获得下一条提示，#ans 获取答案，回答直接回复 |
-| `#phi (song\|曲) xxx` | 查询phigros中某一曲目的图鉴，支持设定别名 |
-| `#phi chart <曲名> [难度=IN]` | 查询phigros中某一谱面的详细信息 |
-| `#phi tag <曲名> [难度=IN] <标签>` | 查看谱面标签，标签可选项见回复说明，难度默认为IN |
-| `#phi settag <曲名> [难度=IN] <标签>` | 给谱面打标签，推荐先使用/tag查询标签列表，难度默认为IN |
-| `#phi (comment\|cmt\|评论\|评价) <曲名> [难度=IN](换行)<内容>` | 评论曲目，难度默认为IN |
-| `#phi recmt <评论ID>` | 查看并确认是否删评，仅发送者和主人权限，需要二次确认 |
+| `#phi (cn\|gb)?(bind\|绑定) <sessionToken>` | 绑定 Phigros 查分器 sessionToken；`cn` 为国服（默认），`gb` 为国际服 |
+| `#phi bind qrcode` | 使用二维码方式获取并绑定 sessionToken |
+| `#phi (unbind\|解绑)` | 解绑并清除本地保存的 sessionToken、API ID、存档与历史（需二次确认，不影响 API 平台绑定） |
+| `#phi clean` | 删除所有本地记录 |
+| `#phi (update\|更新存档)` | 手动更新 Bot 端存储的成绩（`#phi pgr` 也会自动更新） |
+| `#phi tk help` | sessionToken 相关帮助文档 |
+
+## Phi - 成绩查询与统计
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#phi (pgr\|rks\|b30) [背景]` | 获取 B30 成绩图，可指定背景曲绘 |
+| `#phi p30 [背景]` | 获取 P30（All Perfect）成绩图 |
+| `#phi (b\|p\|x\|fc)<N>` | 显示指定数量的成绩图，如 `#phi b60`、`#phi p30`、`#phi x30`、`#phi fc30` |
+| `#phi info[1\|2]` | 查看个人统计信息 |
+| `#phi (score\|单曲成绩) <曲目> [-dif 难度] [-or acc\|score\|fc\|time] [-unrank]` | 查询单曲成绩与推分建议；`-unrank` 关闭排名成绩，`-dif` 指定排名难度，`-or` 指定排序方式 |
+| `#phi (lvsco(re)\|scolv) <定数范围> [难度]` | 获取指定区间成绩统计图，如 `#phi lvsco 12-15 IN` |
+| `#phi chap <章节名称\|help>` | 查询章节成绩，`#phi chap help` 查看支持的章节 |
+| `#phi (ahv\|achievement) <定数> [-v 版本]` | 查询定数成绩表，可指定版本号 |
+| `#phi list [-dif 定数范围] [-acc ACC范围] [难度] [评级]` | 列出所有匹配的成绩，如 `#phi list -dif 11.1-12.2 -acc 98.5-100 IN FC` |
+| `#phi hisb30` | 根据历史记录计算 B30 变化情况 |
+| `#phi lmtacc <0-100>` | 计算筛去低于指定 ACC 成绩后的 RKS |
+| `#phi best<N>` | 文字版 B<N> 成绩（最高 99），建议私聊获取完整版 |
+| `#phi (suggest\|推分) [定数] [难度] [评级]` | 推分建议（使游戏内显示数值 +0.01） |
+| `#phi data` | 获取 data 数量 |
+
+## Phi - 图鉴与曲库
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#phi (ranklist\|排行榜) [名次]` | 放榜 |
+| `#phi (rankfind\|查询排名) [rks]` | 查询 RKS 排名 |
+| `#phi (song\|曲) <曲目> [-comment] [-p 页码]` | 查询曲目图鉴，`-comment` 展示评论，`-p` 翻页 |
+| `#phi chart <曲名> <难度>` | 查询谱面详情 |
+| `#phi tag <曲名> [难度=IN]` | 查看谱面标签，难度默认为 IN |
+| `#phi settag <曲名> [难度=IN] <标签>` | 给谱面打标签，建议先用 `#phi tag` 查询标签列表 |
+| `#phi (cmt\|comment\|评论\|评价) <曲名> [难度=IN](换行)<内容>` | 评论曲目，难度默认为 IN |
 | `#phi mycmt` | 查看自己的云端评论 |
-| `#phi (table\|定数表) <定数>` | 查询phigros定数表 |
-| `#phi new` | 查询更新的曲目 |
-| `#phi tips` | 随机tips |
-| `#phi jrrp` | 今日人品 |
-| `#phi alias xxx` | 查询某一曲目的别名 |
-| `#phi (rand\|随机) [定数] [难度]` | 根据条件随机曲目，条件支持难度、定数，难度可以多选，定数以-作为分隔 |
-| `#phi randclg [课题总值] [难度] ([曲目定数范围])` | 随机课题 eg: /rand 40 (IN 13-15) |
-| `#phi (曲绘\|ill\|Ill) xxx` | 查询phigros中某一曲目的曲绘 |
-| `#phi (search\|查询\|检索) <条件 值>` | 检索曲库中的曲目，支持BPM 定数 物量，条件 bpm dif cmb，值可以为区间，以 - 间隔 |
-| `#phi (theme\|主题) [0-2]` | 切换绘图主题，仅对 b30, update, randclg, sign, task 生效 |
-| `#phi (myset\|个人设置)` | 查看和修改用户设置，参数为设置项名称，值支持使用序号选择，建议先查看设置项列表 |
-| `sign/签到` | 签到获取Notes |
-| `task/我的任务` | 查看自己的任务 |
-| `retask/刷新任务` | 刷新任务，需要花费20Notes |
-| `#phi (send\|送\|转) <目标> <数量>` | 送给目标Note，支持@或QQ号 |
+| `#phi recmt <评论ID>` | 查看并确认是否删评（仅发送者与主人权限） |
+| `#phi (table\|定数表) <定数> [-v 版本]` | 查询定数表，可指定版本号 |
+| `#phi (ill\|曲绘) <曲目>` | 查询曲目曲绘 |
+| `#phi (rand\|随机) [定数] [难度]` | 随机谱面，难度可多选，定数以 `-` 分隔 |
+| `#phi randclg [课题总值] [难度] ([定数范围])` | 随机课题，如 `#phi randclg 40+ IN` |
+| `#phi (search\|查询\|检索) [bpm N-N] [dif N-N] [cmb N-N]` | 按 BPM / 定数 / 物量检索曲目，建议私聊 |
+| `#phi alias <id或别名>` | 查询曲目别名 |
+| `#phi (com\|计算) <定数> <ACC>` | 计算等效 RKS，如 `#phi com 15.9 99.50` |
+| `#phi tips` | 随机 tips |
+
+## Phi - 别名提案
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#phi (alias submit\|别名 提案) <曲目> \| <别名> \| [私密备注]` | 提交别名提案，仅限私聊且需绑定 sessionToken |
+| `#phi (alias mine\|别名 我的)` | 查询自己提交的别名提案及审核状态 |
+| `#phi (alias public\|别名 公审)` | 查看正在公开投票的提案、理由与票数 |
+| `#phi (alias appeal\|别名 申诉) <提案ID> \| <理由>` | 为被私密拒绝的提案申请公开评审（仅私聊） |
+| `#phi (alias vote\|别名 投票) <提案ID> <赞成\|反对>` | 参与公开投票，也支持 `yes/no`、`1/-1` |
+| `#phi (alias unvote\|别名 撤票) <提案ID>` | 撤回自己对指定提案的投票 |
+
+## Phi - phi-api 账号与权限
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#phi apihelp` | 查看 phi-api 绑定、权限与账号管理的详细帮助 |
+| `#phi bind <查分ID>` | 将当前平台账号绑定到已有 phi-api 查分账号 |
+| `#phi auth <API Token>` | 用 API Token 验证账号并获取、保存对应的 Phigros sessionToken |
+| `#phi setApiToken <新Token>` | 设置或更新 phi-api 的 API Token（需本地已绑定 SSTK） |
+| `#phi (tkls\|lstk)` | 查看 phi-api 账号当前绑定的全部平台账号 |
+| `#phi apiset [设置项] [开\|关]` | 查看或修改数据收集、排行榜、数据聚合、搜索权限，如 `#phi apiset 排行榜 关` |
+| `#phi clearApiData` | 永久注销 phi-api 账号并清除云端数据（需二次确认） |
+
+## Phi - 娱乐与个人设定
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#phi (ltr\|开字母)` | 开字母小游戏：`#出 A` / `#open A` 开字母，`#第n个` / `#nX.xxx` 回答，`#ans` 看答案 |
+| `#phi (guess\|猜曲绘)` | 猜曲绘，直接回复曲名，`#ans` 结束 |
+| `#phi (tipgame\|提示猜曲)` | 提示猜歌，`#tip` 获取下一条提示，`#ans` 看答案 |
+| `#phi (theme\|主题) [0-3]` | 切换绘图主题 |
+| `#phi market` | 浏览主题市场：`#phi market list [关键词] [页码]`、`#phi market detail <slug>` |
+| `#phi (myset\|个人设置) [字段] [值]` | 查看或修改个人设置，值支持序号选择 |
+| `#phi (sign\|签到)` | 签到获取 Notes 与任务卡 |
+| `#phi (send\|送\|转) @目标 <数量>` | 转账 Notes，会扣除部分手续费 |
+| `#phi (task\|我的任务)` | 查看自己的任务 |
+| `#phi (retask\|刷新任务)` | 花费 Notes 重置任务，每日首次免费 |
+| `#phi jrrp` | 查询今日人品（仅供娱乐） |
+
+## Phi - 管理员命令（仅主人）
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#phi set<功能><参数>` | 修改设置，先发 `#phi set` 查看功能名称（命令与参数之间无空格） |
+| `#phi backup [back]` | 备份存档；加 `back` 发送备份文件，自动保存于 `/phi-plugin/backup/` |
+| `#phi restore` | 从备份还原（需先把文件放入 `/phi-plugin/backup/`） |
+| `#phi (setnick\|设置别名) <原名>---><别名>` | 设置某一歌曲的别名 |
+| `#phi (delnick\|删除别名) <别名>` | 删除某一歌曲的别名 |
+| `#phi repu` | 重启 puppeteer（仅支持最新版喵崽） |
+| `#phi (下载曲绘\|down ill)` | 下载曲绘到本地，首次安装或渲染异常时优先执行 |
+| `#phi [强制]更新` / `#phi gx` | 更新本插件 |
+| `#phi get <名次>` | 获取排行榜上某一名次的 sessionToken |
+| `#phi del <sessionToken>` / `#phi allow <sessionToken>` | 禁用 / 恢复某一 sessionToken |
+| `#phi ban <功能>` / `#phi unban <功能>` | 禁用 / 恢复某一类功能 |
+| `#phi updateUserToken` / `#phi updateComment` | 批量同步本地 sessionToken / 本地评论到 phi-api |
+
+***
+
+<a name="rizline"></a>
+
+#  Rizline（riz-plugin）插件使用帮助
+
+> 命令头由配置项 `cmdhead` 决定，**默认值为 `r`**，可用 `#` 或 `/` 触发，即 `#r 曲 xxx` 与 `/r song xxx` 等价。下文统一以默认的 `#r` 书写；若你修改了 `cmdhead`，请把 `r` 换成自己的命令头。
+
+## Rizline - 图鉴与定数
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `#r 曲 <曲名>` | `#r song <曲名>` | 曲名或别名（必填） | 无 | 查询 Rizline 曲目图鉴并渲染图片，使用模糊匹配。匹配到多首时会列出编号，等待你回复序号（默认 10 秒）后继续。 |
+| `#r 定数表 <定数>[+]` | `#r table <定数>[+]` | 定数（必填），尾部可加 `+` | 无 | 按定数查表并渲染图片。`14` = 14.0~14.5，`14+` = 14.6~14.9，上限 15.1。 |
+
+图鉴与 `b40` 受群禁用分类 `song` 控制；定数表不受群禁用控制。
+
+## Rizline - 平台绑定
+
+绑定原理：通过 `riz-plugin-api` 平台（默认 `https://phib19.top:8090`）把 Rizline 账号绑定到 Bot 用户，获得 `sessionToken` 供后续查分使用。
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `#r bind [otk_xxx] [备注]` | `#r 绑定 [otk_xxx] [备注]` | 可选一次性密钥 `otk_xxx` 或会话令牌 `st_xxx`，可选备注 | 无 | **不带参数**：Bot 申请临时授权链接（5 分钟有效），你打开链接同意协议并登录后，Bot 每 3 秒轮询并自动完成绑定。**带 `otk_`**：直接兑换 sessionToken。**带 `st_`**：直接写入绑定。 |
+| `#r unbind` | `#r 解绑平台` | 无 | 无 | 解绑当前平台账号，清除本地 sessionToken。 |
+| `#r bindinfo` | `#r 绑定平台` | 无 | 无 | 查看绑定状态：token 尾号、备注、平台地址、绑定时间。 |
+
+绑定 / 解绑 / 绑定状态均受群禁用分类 `bind` 控制。
+
+## Rizline - 存档与 B40
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `#b40` | `#r b40` / `#r B40` | 无 | 无 | 读取平台存档中 RKS 最高的 40 首渲染 B40 图（含头像、背景、称号、总 RKS 等）。**触发即实时拉取存档，无需先执行更新命令**；未绑定会提示先绑定。 |
+
+## Rizline - 管理功能（仅主人）
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `#riz 更新` | `#rzl` / `#RIZ` / `#Riz` / `#日子线` + `更新` 或 `gx`，可插 `强制` / `qz` | 可选 `强制`/`qz` | 主人 | 更新插件本体（`git pull`，强制模式会重置到远端）。 |
+| `#riz 下载曲绘` | 上述命令头 + `下载/更新/gx/down/up` + `曲绘/ill` | 无 | 主人 | 下载或更新曲绘资源到 `resources/original_ill/`。 |
+
+> **注意**：更新与下载曲绘的命令头固定为 `riz` 系列，**不跟随 `cmdhead`**（不能用 `#r更新`）；且必须以主人权限执行曲绘下载，否则曲绘无法正常展示。
+
+**已知差异**：README 提到的 `/rizhelp` 帮助菜单与 `#update` 命令在代码中并未注册；`b40` 会实时拉取存档，无需手动更新。本文即以源码为准整理。
+
+***
+
+<a name="chunithm"></a>
+
+#  CHUNITHM（中二节奏）插件使用帮助
+
+> 命令前缀统一为 `chu`，前面的 `#` 可省略，例如 `chu b50`、`#chu song 曲名`。`chu帮助` 允许 `chu` 后带一个可选空格；`chu随个`、`chu随机` 中「随/机」须紧跟 `chu`。
+
+## CHUNITHM - 帮助与基础
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `chu帮助` | `#chu帮助`、`chu help` | 无 | 无 | 显示插件内置帮助文本，末尾附带当前数据源（louis / 落雪）。 |
+
+## CHUNITHM - 曲目查询（公开，无需绑定）
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `chu song <曲名>` | `#chu song <曲名>` | 支持精确曲名、精确别名、模糊包含匹配 | 无 | 渲染曲目数据卡，展示 ID、曲师、分类、BPM、版本、各难度定数与物量。 |
+| `chu songid <ID>` | `#chu songid <ID>` | 数字 musicID | 无 | 以「封面图 + 文字」形式返回曲目信息。 |
+| `<曲名>是什么歌` / `<曲名>是什么曲` | 无（全局触发，不需要 `chu` 前缀） | 曲名 | 无 | 等价于 `chu song`。 |
+| `chu calc <分数> <曲名> [难度]` | `#chu calc ...` | 分数（0~1010000）、曲名、可选难度（默认 `master`） | 无 | 计算单曲 rating，并给出允许的 JUSTICE / ATTACK / MISS 最大数量。 |
+| `chu随个 [范围]` | `chu随机`、`#chu随个` | 可选等级范围（如 `12`、`14+`、`14.0`~`15.7`） | 无 | 随机抽取一首曲目并展示曲目卡。 |
+
+难度可写 `bas`/`adv`/`exp`/`mas`/`ult`，也接受 `basic`/`advanced`/`expert`/`master`/`ultima` 等完整写法。
+
+## CHUNITHM - 别名管理（公开）
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `chu set <别名> <曲名>` | `#chu set ...` | 别名、曲名 | 无 | 为指定曲目新增别名，已存在时会提示不要重复设置。 |
+| `chu alias <曲名>` | `#chu alias ...` | 曲名 | 无 | 列出该曲目当前的全部别名。 |
+
+## CHUNITHM - 账号绑定与 OAuth（仅限私聊）
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `chu bind <louis\|lx> <TOKEN>` | `#chu bind ...` | 服务器（`louis` 或 `lx`）、个人 API Token | 无（须私聊） | 校验 Token 通过后保存绑定，并把默认服务器设为所选服务器。 |
+| `chu oauth` | `#chu oauth` | 无 | 无（须私聊） | 生成落雪（LXNS）OAuth 授权链接，在授权页获得形如 `JVJ6-VPTM-MGHZ` 的授权码。 |
+| `chu oauth <授权码>` | `#chu oauth <code>` | 授权码 | 无（须私聊） | 用授权码换取访问 / 刷新令牌并保存，默认服务器设为落雪，令牌到期自动刷新。 |
+| `chu oauth status` | `#chu oauth status` | 无 | 无（须私聊） | 查看当前默认服务器、OAuth 授权状态或个人密钥绑定情况。 |
+| `chu oauth unbind` | `#chu oauth unbind` | 无 | 无（须私聊） | 解除本地保存的落雪 OAuth 授权。 |
+
+## CHUNITHM - 成绩查询（需先绑定账号）
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `chu b30` | `#chu b30` | 无 | 无（需绑定） | 拉取并渲染 Best30 卡片。 |
+| `chu b50` | `#chu b50` | 无 | 无（需绑定） | 渲染 Best50 卡片：Top30 + New20。 |
+| `chu score <曲名>` | `#chu score <曲名>` | 曲名 | 无（需绑定） | 查询该曲全部难度的成绩与单曲 rating，渲染成绩卡。 |
+| `chu list <等级区间>` | `#chu list <等级区间>` | `12`~`15+`，或 `12.0`~`15.7` 的小数定数 | 无（需绑定） | 按定数区间列出该区间所有谱面的成绩与曲绘。 |
+| `chu progress <版本>` | `#chu progress <版本>` | 版本名或别名（`初代`、`无印`、`air`、`star`、`new`、`sun`、`luminous`、`verse-x`、`mate` 等） | 无（需绑定） | 展示指定版本曲目的成绩分布。 |
+
+## CHUNITHM - 曲库维护与门条件
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `chu update` | `#chu update` | 无 | 无（帮助文本标注“管理员”，代码未强制校验） | 按配置的数据源拉取曲库与定数并写入本地。 |
+| `chu downill` | `#chu downill` | 无 | 无（同上） | 下载曲绘仓库到本地，支持 `githubProxy` 代理。 |
+| `origin门条件` / `air门条件` | `origin的门槛`、`ori门`、`air门` 等 | 前缀含 `origin`/`ori`/`air` | 无 | 发送对应的门条件图片。 |
+
+**已知限制**：成绩类命令需先绑定，绑定与 OAuth 仅能在私聊完成；`chu update`、`chu downill` 的内置帮助虽标注“管理员”，但源码未做主人 / 群管校验。帮助文本中的 `chu b30 [/simple]` 参数实际未实现，缺曲绘提示里的 `chu 更新曲图` 实际命令为 `chu downill`。
 
 ***
 
@@ -816,4 +1039,4 @@ sakura 162993657
 
 ***
 
-*文档最后更新时间：2026-04-24*
+*文档最后更新时间：2026-09-20*
