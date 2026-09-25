@@ -22,7 +22,8 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 	// 当position为left时开启此项，文章详情页将额外显示右侧边栏
 	// 当position为right时开启此项，文章详情页将额外显示左侧边栏
 	// 适用在只想用单侧栏，但在文章详情页想用对侧栏的目录等组件的场景
-	showBothSidebarsOnPostPage: true,
+	// 无左侧组件时请保持关闭：开启会让客户端 JS 在文章页切到 3 列空列，导致主内容被挤到窄列、页脚错位
+	showBothSidebarsOnPostPage: false,
 
 	// 左侧边栏组件配置列表
 	leftComponents: [],
