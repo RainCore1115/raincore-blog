@@ -1,0 +1,31 @@
+---
+interface Props {
+	/** Umami 统计脚本地址，如 https://u.a.07210700.xyz/script.js */
+	scriptUrl: string;
+	/** data-website-id */
+	websiteId: string;
+	/** 可选的会话录制脚本地址，如 https://u.a.07210700.xyz/recorder.js */
+	recorderUrl?: string;
+}
+
+const { scriptUrl, websiteId, recorderUrl } = Astro.props;
+---
+
+<!-- Umami 网站统计 -->
+<script
+	is:inline
+	data-swup-ignore-script
+	defer
+	src={scriptUrl}
+	data-website-id={websiteId}></script>
+{
+	recorderUrl && (
+		<script
+			is:inline
+			data-swup-ignore-script
+			defer
+			src={recorderUrl}
+			data-website-id={websiteId}
+		></script>
+	)
+}

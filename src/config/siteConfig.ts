@@ -158,6 +158,12 @@ export const siteConfig: SiteConfig = {
 		googleAnalyticsId: "",
 		// Microsoft Clarity ID
 		microsoftClarityId: "",
+		// Umami 统计脚本地址（自建），留空则不加载
+		umamiScriptUrl: "https://u.a.07210700.xyz/script.js",
+		// Umami data-website-id
+		umamiWebsiteId: "8b381dd6-7307-4a57-936f-1cfa3e96f4dc",
+		// Umami 会话录制脚本地址（可选），留空则不加载
+		umamiRecorderUrl: "https://u.a.07210700.xyz/recorder.js",
 	},
 
 	// 图像优化及响应式配置

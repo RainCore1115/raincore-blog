@@ -1,6 +1,7 @@
 ---
 import GoogleAnalytics from "@components/analytics/GoogleAnalytics.astro";
 import MicrosoftClarity from "@components/analytics/MicrosoftClarity.astro";
+import Umami from "@components/analytics/Umami.astro";
 import FancyboxManager from "@components/features/FancyboxManager.astro";
 import FontManager from "@components/features/FontManager.astro";
 import MusicManager from "@components/features/MusicManager.astro";
@@ -101,6 +102,13 @@ const siteLang = lang.replace("_", "-");
     )}
     {siteConfig.analytics?.microsoftClarityId && (
             <MicrosoftClarity clarityId={siteConfig.analytics.microsoftClarityId} />
+    )}
+    {siteConfig.analytics?.umamiScriptUrl && siteConfig.analytics?.umamiWebsiteId && (
+            <Umami
+              scriptUrl={siteConfig.analytics.umamiScriptUrl}
+              websiteId={siteConfig.analytics.umamiWebsiteId}
+              recorderUrl={siteConfig.analytics.umamiRecorderUrl}
+            />
     )}
 
     <title>{pageTitle}</title>

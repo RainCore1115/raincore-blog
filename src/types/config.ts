@@ -110,6 +110,9 @@ export type SiteConfig = {
 	analytics?: {
 		googleAnalyticsId?: string; // Google Analytics ID
 		microsoftClarityId?: string; // Microsoft Clarity ID
+		umamiScriptUrl?: string; // Umami 统计脚本地址（自建），如 https://u.a.07210700.xyz/script.js
+		umamiWebsiteId?: string; // Umami data-website-id
+		umamiRecorderUrl?: string; // Umami 会话录制脚本地址（可选），如 https://u.a.07210700.xyz/recorder.js
 	};
 
 	// 图片优化配置
