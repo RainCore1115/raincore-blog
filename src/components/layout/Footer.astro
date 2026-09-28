@@ -1,7 +1,10 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
+import UmamiStat from "@/components/analytics/UmamiStat.astro";
 import { footerConfig, profileConfig } from "@/config";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
 import { url } from "@/utils/url-utils";
 
 const currentYear = new Date().getFullYear();
@@ -37,6 +40,28 @@ if (footerConfig.enable) {
   <div class="transition text-50 text-sm text-center">
     <div class="mb-2">
       {customFooterHtml && <div set:html={customFooterHtml} />}
+    </div>
+    <div class="m-0.5 inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+      <UmamiStat
+        metric="pageviews"
+        icon="material-symbols:query-stats-rounded"
+        prefix={`${i18n(I18nKey.siteTotalPageViews)} `}
+        loadingText={i18n(I18nKey.pageViewsLoading)}
+        iconWrapperClass="inline-flex h-5 w-5 items-center justify-center rounded-md bg-(--btn-regular-bg) text-(--primary) mr-1.5"
+        iconClass="text-[1rem]"
+        textClass="text-50 text-sm font-medium"
+        title={i18n(I18nKey.siteTotalPageViews)}
+      />
+      <UmamiStat
+        metric="visitors"
+        icon="material-symbols:groups-outline-rounded"
+        prefix={`${i18n(I18nKey.siteTotalVisitors)} `}
+        loadingText={i18n(I18nKey.pageViewsLoading)}
+        iconWrapperClass="inline-flex h-5 w-5 items-center justify-center rounded-md bg-(--btn-regular-bg) text-(--primary) mr-1.5"
+        iconClass="text-[1rem]"
+        textClass="text-50 text-sm font-medium"
+        title={i18n(I18nKey.siteTotalVisitors)}
+      />
     </div>
     <div class="m-0.5">
       &copy; <span id="copyright-year">{currentYear}</span>

@@ -110,10 +110,21 @@ export type SiteConfig = {
 	analytics?: {
 		googleAnalyticsId?: string; // Google Analytics ID
 		microsoftClarityId?: string; // Microsoft Clarity ID
-		umamiScriptUrl?: string; // Umami 统计脚本地址（自建），如 https://u.a.07210700.xyz/script.js
-		umamiWebsiteId?: string; // Umami data-website-id
-		umamiRecorderUrl?: string; // Umami 会话录制脚本地址（可选），如 https://u.a.07210700.xyz/recorder.js
-		umamiShareUrl?: string; // Umami 公开分享地址（可选），在「站点统计」中提供访问统计入口
+		umamiAnalytics?: {
+			websiteId?: string; // Umami Website ID（data-website-id）
+			scriptUrl?: string; // Umami JS 地址，支持使用自建
+			recorderUrl?: string; // Umami 会话录制脚本地址（可选）
+			shareId?: string; // Umami 分享链接中的 shareId，用于公开读取统计数据
+			shareUrl?: string; // Umami 分享链接，可自动解析 shareId 和 API 域名
+			stats?: {
+				enable?: boolean; // 是否展示公开访问统计
+				baseUrl?: string; // Umami 服务地址，默认从 scriptUrl/shareUrl 推导
+				shareId?: string; // 覆盖上层 shareId
+				shareUrl?: string; // 覆盖上层 shareUrl
+				startAt?: number; // 统计开始时间戳，默认 0
+				cacheTtl?: number; // 客户端缓存时间，单位毫秒
+			};
+		};
 	};
 
 	// 图片优化配置

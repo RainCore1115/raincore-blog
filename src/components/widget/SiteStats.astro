@@ -21,7 +21,7 @@ const { class: className, style } = Astro.props;
 const siteStartDate = siteConfig.siteStartDate || "2025-01-01";
 
 // Umami 公开分享入口（可选，用于查看访问统计）
-const umamiShareUrl = siteConfig.analytics?.umamiShareUrl;
+const umamiShareUrl = siteConfig.analytics?.umamiAnalytics?.shareUrl;
 
 // 获取所有文章
 const posts = await getSortedPosts();

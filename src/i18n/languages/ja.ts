@@ -195,6 +195,9 @@ export const ja: Translation = {
 	[Key.pageViews]: "閲覧数",
 	[Key.pageViewsLoading]: "読み込み中...",
 	[Key.pageViewsError]: "統計利用不可",
+	[Key.pageVisitsSuffix]: " 回閲覧",
+	[Key.siteTotalPageViews]: "総閲覧数",
+	[Key.siteTotalVisitors]: "総訪問者数",
 
 	// ピン留め
 	[Key.pinned]: "ピン留め",

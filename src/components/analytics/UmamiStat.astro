@@ -1,0 +1,75 @@
+---
+import { Icon } from "astro-icon/components";
+import { siteConfig } from "@/config";
+
+type UmamiMetric =
+	| "pageviews"
+	| "visitors"
+	| "visits"
+	| "bounces"
+	| "totaltime";
+
+interface Props {
+	path?: string;
+	metric?: UmamiMetric;
+	icon?: string;
+	prefix?: string;
+	suffix?: string;
+	loadingText?: string;
+	errorText?: string;
+	className?: string;
+	iconWrapperClass?: string;
+	iconClass?: string;
+	textClass?: string;
+	valueClass?: string;
+	title?: string;
+}
+
+const umamiConfig = siteConfig.analytics?.umamiAnalytics;
+const statsEnabled =
+	!!umamiConfig?.websiteId && umamiConfig.stats?.enable !== false;
+
+const {
+	path = "",
+	metric = "pageviews",
+	icon = "material-symbols:visibility-outline-rounded",
+	prefix = "",
+	suffix = "",
+	loadingText = "...",
+	errorText = "",
+	className = "",
+	iconWrapperClass = "meta-icon",
+	iconClass = "text-xl",
+	textClass = "text-50 text-sm font-medium",
+	valueClass = "",
+	title = `${prefix}${suffix}`.trim(),
+} = Astro.props;
+---
+
+{
+	statsEnabled && (
+		<span
+			class:list={["umami-stat inline-flex items-center", className]}
+			data-umami-stat
+			data-umami-stat-path={path}
+			data-umami-stat-metric={metric}
+			data-umami-stat-prefix={prefix}
+			data-umami-stat-suffix={suffix}
+			data-umami-stat-error={errorText}
+			aria-live="polite"
+			aria-label={title || undefined}
+			title={title || undefined}
+		>
+			<span class={iconWrapperClass} aria-hidden="true">
+				<Icon name={icon} class={iconClass} />
+			</span>
+			<span class:list={["umami-stat-text", textClass]}>
+				<span data-umami-stat-prefix>{prefix}</span>
+				<span class={valueClass} data-umami-stat-value>
+					{loadingText}
+				</span>
+				<span data-umami-stat-suffix>{suffix}</span>
+			</span>
+		</span>
+	)
+}

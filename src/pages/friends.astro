@@ -3,6 +3,7 @@ import { getEntry, render } from "astro:content";
 import Comment from "@components/comment/index.astro";
 import Markdown from "@components/common/Markdown.astro";
 import { Icon } from "astro-icon/components";
+import UmamiStat from "@/components/analytics/UmamiStat.astro";
 import { friendsPageConfig, getEnabledFriends } from "@/config";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
@@ -50,6 +51,15 @@ const description =
             </p>
           )
         }
+        <div class="flex flex-wrap items-center gap-4 text-neutral-500 dark:text-neutral-400">
+          <UmamiStat
+            path="/friends/"
+            icon="material-symbols:visibility-outline-rounded"
+            suffix={i18n(I18nKey.pageVisitsSuffix)}
+            loadingText={i18n(I18nKey.pageViewsLoading)}
+            title={i18n(I18nKey.pageViews)}
+          />
+        </div>
       </div>
 
       <!-- 标签筛选 -->

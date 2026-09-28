@@ -1,0 +1,323 @@
+---
+import { siteConfig } from "@/config";
+
+const umamiConfig = siteConfig.analytics?.umamiAnalytics;
+const statsConfig = umamiConfig?.stats;
+
+const umamiStatsConfig = {
+	baseUrl: statsConfig?.baseUrl ?? "",
+	cacheTtl: statsConfig?.cacheTtl ?? 3_600_000,
+	enabled: !!umamiConfig?.websiteId && statsConfig?.enable !== false,
+	scriptUrl: umamiConfig?.scriptUrl ?? "",
+	shareId: statsConfig?.shareId ?? umamiConfig?.shareId ?? "",
+	shareUrl: statsConfig?.shareUrl ?? umamiConfig?.shareUrl ?? "",
+	startAt: statsConfig?.startAt ?? 0,
+	websiteId: umamiConfig?.websiteId ?? "",
+};
+---
+
+{
+	umamiStatsConfig.enabled && (
+		<script
+			is:inline
+			data-swup-ignore-script
+			define:vars={{ umamiStatsConfig }}
+		>
+			(() => {
+				const incomingConfig = umamiStatsConfig || {};
+				const CACHE_PREFIX = "firefly-umami-stats";
+				const SHARE_INFO_CACHE_TTL = 3_600_000;
+
+				function normalizeBaseUrl(value) {
+					return String(value || "").trim().replace(/\/+$/, "");
+				}
+
+				function normalizeApiBase(value) {
+					const baseUrl = normalizeBaseUrl(value);
+					if (!baseUrl) return "";
+					return baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
+				}
+
+				function parseUrl(value) {
+					try {
+						return new URL(String(value || ""));
+					} catch {
+						return null;
+					}
+				}
+
+				function parseBaseUrlFromUrl(value) {
+					const parsed = parseUrl(value);
+					return parsed ? normalizeBaseUrl(parsed.origin) : "";
+				}
+
+				function parseShareIdFromUrl(value) {
+					const parsed = parseUrl(value);
+					const match = parsed?.pathname.match(/\/share\/([^/?#]+)/);
+					return match?.[1] || "";
+				}
+
+				function normalizePath(value) {
+					const raw = String(value || "").trim();
+					if (!raw) return "";
+
+					const parsed = parseUrl(raw);
+					const pathname = parsed ? parsed.pathname : raw.split(/[?#]/)[0];
+					const withLeadingSlash = pathname.startsWith("/")
+						? pathname
+						: `/${pathname}`;
+					return withLeadingSlash.replace(/\/{2,}/g, "/");
+				}
+
+				function readCache(key, ttl) {
+					try {
+						const raw = localStorage.getItem(key);
+						if (!raw) return null;
+
+						const parsed = JSON.parse(raw);
+						if (Date.now() - parsed.timestamp < ttl) {
+							return parsed.value;
+						}
+						localStorage.removeItem(key);
+					} catch {
+						localStorage.removeItem(key);
+					}
+					return null;
+				}
+
+				function writeCache(key, value) {
+					try {
+						localStorage.setItem(
+							key,
+							JSON.stringify({
+								timestamp: Date.now(),
+								value,
+							}),
+						);
+					} catch {
+						// localStorage can be unavailable in private modes.
+					}
+				}
+
+				function createCacheKey(parts) {
+					return `${CACHE_PREFIX}:${parts.map(encodeURIComponent).join(":")}`;
+				}
+
+				async function fetchJson(url, headers = {}) {
+					const response = await fetch(url, {
+						credentials: "omit",
+						headers: {
+							Accept: "application/json",
+							...headers,
+						},
+					});
+					const contentType = response.headers.get("content-type") || "";
+					if (!response.ok) {
+						throw new Error(`${response.status} ${response.statusText}`);
+					}
+					if (!contentType.includes("application/json")) {
+						throw new Error("Umami stats response is not JSON");
+					}
+					return response.json();
+				}
+
+				function resolveConfig(config) {
+					const shareUrl = String(config.shareUrl || "").trim();
+					const scriptUrl = String(config.scriptUrl || "").trim();
+					const shareId =
+						String(config.shareId || "").trim() || parseShareIdFromUrl(shareUrl);
+					const baseUrl =
+						normalizeBaseUrl(config.baseUrl) ||
+						parseBaseUrlFromUrl(shareUrl) ||
+						parseBaseUrlFromUrl(scriptUrl);
+
+					return {
+						baseUrl,
+						cacheTtl: Number(config.cacheTtl) || 3_600_000,
+						enabled: Boolean(config.enabled),
+						shareId,
+						startAt: Number(config.startAt) || 0,
+						websiteId: String(config.websiteId || "").trim(),
+					};
+				}
+
+				const state = {
+					...resolveConfig(incomingConfig),
+					swupBound: false,
+				};
+
+				async function getShareInfo() {
+					if (!state.shareId) return null;
+
+					const cacheKey = createCacheKey([
+						"share-info",
+						state.baseUrl,
+						state.shareId,
+					]);
+					const cached = readCache(cacheKey, SHARE_INFO_CACHE_TTL);
+					if (cached?.token && cached?.websiteId) return cached;
+
+					const apiBase = normalizeApiBase(state.baseUrl);
+					if (!apiBase) throw new Error("Missing Umami API base URL");
+
+					const shareInfo = await fetchJson(
+						`${apiBase}/share/${encodeURIComponent(state.shareId)}`,
+					);
+
+					if (!shareInfo?.token || !shareInfo?.websiteId) {
+						throw new Error("Incomplete Umami share info");
+					}
+
+					writeCache(cacheKey, shareInfo);
+					return shareInfo;
+				}
+
+				async function fetchStats(path) {
+					if (!state.enabled) throw new Error("Umami stats disabled");
+					if (!state.baseUrl) throw new Error("Missing Umami base URL");
+
+					const normalizedPath = normalizePath(path);
+					const cacheKey = createCacheKey([
+						"stats",
+						state.baseUrl,
+						state.websiteId,
+						state.shareId || "direct",
+						normalizedPath || "__site__",
+						String(state.startAt),
+					]);
+					const cached = readCache(cacheKey, state.cacheTtl);
+					if (cached) return cached;
+
+					const params = new URLSearchParams({
+						endAt: String(Date.now()),
+						startAt: String(state.startAt),
+					});
+					if (normalizedPath) {
+						params.set("path", normalizedPath);
+					}
+
+					const apiBase = normalizeApiBase(state.baseUrl);
+					const headers = {};
+					let websiteId = state.websiteId;
+
+					if (state.shareId) {
+						const shareInfo = await getShareInfo();
+						websiteId = shareInfo.websiteId || websiteId;
+						headers["x-umami-share-context"] = "1";
+						headers["x-umami-share-token"] = shareInfo.token;
+					}
+
+					if (!websiteId) throw new Error("Missing Umami websiteId");
+
+					const stats = await fetchJson(
+						`${apiBase}/websites/${encodeURIComponent(websiteId)}/stats?${params.toString()}`,
+						headers,
+					);
+
+					writeCache(cacheKey, stats);
+					return stats;
+				}
+
+				function getMetricValue(stats, metric) {
+					const raw = stats?.[metric];
+					if (typeof raw === "number") return raw;
+					const value = Number(raw?.value);
+					return Number.isFinite(value) ? value : 0;
+				}
+
+				function formatValue(value) {
+					return String(Math.max(0, Math.round(Number(value) || 0)));
+				}
+
+				function setElementValue(element, value) {
+					const valueElement = element.querySelector("[data-umami-stat-value]");
+					if (valueElement) {
+						valueElement.textContent = formatValue(value);
+					}
+					element.hidden = false;
+					element.dataset.umamiStatState = "done";
+				}
+
+				function setElementError(element) {
+					const errorText = element.dataset.umamiStatError || "";
+					if (errorText) {
+						const valueElement = element.querySelector(
+							"[data-umami-stat-value]",
+						);
+						if (valueElement) valueElement.textContent = errorText;
+						element.hidden = false;
+					} else {
+						element.hidden = true;
+					}
+					element.dataset.umamiStatState = "error";
+				}
+
+				async function updateElement(element) {
+					const metric = element.dataset.umamiStatMetric || "pageviews";
+					const path = element.dataset.umamiStatPath || "";
+					const signature = `${metric}:${path}`;
+					if (
+						element.dataset.umamiStatSignature === signature &&
+						element.dataset.umamiStatState === "done"
+					) {
+						return;
+					}
+
+					element.dataset.umamiStatSignature = signature;
+					element.dataset.umamiStatState = "loading";
+
+					try {
+						const stats = await fetchStats(path);
+						setElementValue(element, getMetricValue(stats, metric));
+					} catch (error) {
+						console.warn("[Firefly] 获取 Umami 统计失败:", error);
+						setElementError(element);
+					}
+				}
+
+				function init(root = document) {
+					if (!state.enabled) return;
+					const scope = root?.querySelectorAll ? root : document;
+					scope
+						.querySelectorAll("[data-umami-stat]")
+						.forEach((element) => updateElement(element));
+				}
+
+				function bindSwup() {
+					if (state.swupBound || !window.swup?.hooks) return;
+					state.swupBound = true;
+					window.swup.hooks.on("content:replace", () => {
+						setTimeout(() => init(document), 0);
+					});
+					window.swup.hooks.on("page:view", () => {
+						setTimeout(() => init(document), 0);
+					});
+				}
+
+				window.FireflyUmamiStats = {
+					configure(config) {
+						Object.assign(state, resolveConfig(config));
+					},
+					fetchStats,
+					init,
+				};
+
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", () => {
+						bindSwup();
+						init(document);
+					});
+				} else {
+					bindSwup();
+					init(document);
+				}
+
+				document.addEventListener("astro:page-load", () => init(document));
+				document.addEventListener("astro:after-swap", () => {
+					requestAnimationFrame(() => init(document));
+				});
+				document.addEventListener("swup:enable", bindSwup);
+			})();
+		</script>
+	)
+}

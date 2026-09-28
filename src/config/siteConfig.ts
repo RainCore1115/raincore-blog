@@ -158,14 +158,24 @@ export const siteConfig: SiteConfig = {
 		googleAnalyticsId: "",
 		// Microsoft Clarity ID
 		microsoftClarityId: "",
-		// Umami 统计脚本地址（自建），留空则不加载
-		umamiScriptUrl: "https://u.a.07210700.xyz/script.js",
-		// Umami data-website-id
-		umamiWebsiteId: "8b381dd6-7307-4a57-936f-1cfa3e96f4dc",
-		// Umami 会话录制脚本地址（可选），留空则不加载
-		umamiRecorderUrl: "https://u.a.07210700.xyz/recorder.js",
-		// Umami 公开分享地址（在「站点统计」中提供入口），留空则不显示
-		umamiShareUrl: "https://u.a.07210700.xyz/share/tOwoYuc6fR70LBSP",
+		// Umami 统计（自建）
+		umamiAnalytics: {
+			// Umami Website ID（data-website-id）
+			websiteId: "8b381dd6-7307-4a57-936f-1cfa3e96f4dc",
+			// Umami JS 地址，留空则不加载
+			scriptUrl: "https://u.a.07210700.xyz/script.js",
+			// Umami 会话录制脚本地址（可选），留空则不加载
+			recorderUrl: "https://u.a.07210700.xyz/recorder.js",
+			// Umami 分享统计配置：公开读取统计数据（总访问量/总访问人数/单篇浏览量）
+			shareId: "tOwoYuc6fR70LBSP",
+			shareUrl: "https://u.a.07210700.xyz/share/tOwoYuc6fR70LBSP",
+			stats: {
+				enable: true,
+				baseUrl: "https://u.a.07210700.xyz",
+				startAt: 0,
+				cacheTtl: 3_600_000,
+			},
+		},
 	},
 
 	// 图像优化及响应式配置

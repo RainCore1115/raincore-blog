@@ -1,10 +1,11 @@
 ---
 import { Icon } from "astro-icon/components";
+import UmamiStat from "@/components/analytics/UmamiStat.astro";
 import { commentConfig } from "@/config";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import { formatDateToYYYYMMDD } from "@/utils/date-utils";
-import { getCategoryUrl, getTagUrl } from "@/utils/url-utils";
+import { getCategoryUrl, getPostUrlBySlug, getTagUrl } from "@/utils/url-utils";
 
 export interface Props {
 	published: Date;
@@ -22,6 +23,7 @@ export interface Props {
 	customPath?: string;
 	pinned?: boolean;
 	password?: boolean;
+	showUmamiStats?: boolean;
 }
 
 const {
@@ -39,9 +41,11 @@ const {
 	showWordCount = false,
 	customPath,
 	pinned,
+	showUmamiStats = true,
 } = Astro.props;
 
-const path = customPath || (id ? `/posts/${id}` : "");
+const commentPath = customPath || (id ? `/posts/${id}` : "");
+const umamiPath = customPath || (id ? getPostUrlBySlug(id) : "");
 ---
 
 <div
@@ -165,6 +169,19 @@ const path = customPath || (id ? `/posts/${id}` : "");
      )
    }
 
+  <!-- Umami 页面访问量统计（首页文章卡片和文章页都会显示） -->
+  {
+    showUmamiStats && umamiPath && (
+      <UmamiStat
+        path={umamiPath}
+        icon="material-symbols:visibility-outline-rounded"
+        suffix={i18n(I18nKey.pageVisitsSuffix)}
+        loadingText={i18n(I18nKey.pageViewsLoading)}
+        title={i18n(I18nKey.pageViews)}
+      />
+    )
+  }
+
   <!-- Twikoo访问量统计（首页不显示，且文章访问量统计启用时显示） -->
   {
     !isHome &&
@@ -200,7 +217,7 @@ const path = customPath || (id ? `/posts/${id}` : "");
           <span class="text-50 text-sm font-medium mr-1">
             {i18n(I18nKey.pageViews)}
           </span>
-          <span class="text-50 text-sm font-medium waline-pageview-count" data-path={path}>{i18n(I18nKey.pageViewsLoading)}</span>
+          <span class="text-50 text-sm font-medium waline-pageview-count" data-path={commentPath}>{i18n(I18nKey.pageViewsLoading)}</span>
         </div>
       )
   }
@@ -217,7 +234,7 @@ const path = customPath || (id ? `/posts/${id}` : "");
                         <span class="text-50 text-sm font-medium mr-1">
                             {i18n(I18nKey.pageViews)}
                         </span>
-                        <span class="text-50 text-sm font-medium artalk-pv-count" data-path={path}>{i18n(I18nKey.pageViewsLoading)}</span>
+                        <span class="text-50 text-sm font-medium artalk-pv-count" data-path={commentPath}>{i18n(I18nKey.pageViewsLoading)}</span>
                     </div>
         )
     }

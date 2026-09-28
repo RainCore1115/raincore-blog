@@ -4,6 +4,8 @@
 declare global {
 	interface ImportMetaEnv {
 		readonly MEILI_MASTER_KEY: string;
+		readonly UMAMI_SHARE_ID?: string;
+		readonly UMAMI_SHARE_URL?: string;
 	}
 
 	interface ITOCManager {
@@ -30,6 +32,11 @@ declare global {
 		// __fireflyMusic type is defined in global.d.ts
 		semifullScrollHandler?: (() => void) | undefined;
 		initSemifullScrollDetection?: () => void;
+		FireflyUmamiStats?: {
+			configure: (config: Record<string, unknown>) => void;
+			fetchStats: (path?: string) => Promise<unknown>;
+			init: (root?: ParentNode) => void;
+		};
 	}
 }
 
