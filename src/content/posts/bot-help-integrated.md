@@ -5,7 +5,7 @@ tags: [bot, 4k, osu, osu!mania, osumania, maimai, 舞立方, DanceFeng, NoneBot,
 category: bot使用帮助
 draft: false
 published: 2026-04-24
-updated: 2026-09-24
+updated: 2026-09-28
 ---
 
 # baka86bot 功能使用指南合集
@@ -1027,4 +1027,4 @@ prp b50
 
 ***
 
-*文档最后更新时间：2026-09-24*
+*文档最后更新时间：2026-09-28*
