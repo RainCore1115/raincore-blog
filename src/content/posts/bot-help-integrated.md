@@ -1,11 +1,11 @@
 ---
 title: baka86bot 音游查分食用教程
-description: "整合4K准度计算器、舞萌DX（Yunzai 与 NoneBot 双版本）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
-tags: [bot, 4k, maimai, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
+description: "整合4K准度计算器、osu!/osu!mania、舞萌DX（Yunzai 与 NoneBot 双版本）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
+tags: [bot, 4k, osu, osu!mania, osumania, maimai, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
 published: 2026-04-24
-updated: 2026-09-21
+updated: 2026-09-24
 ---
 
 # baka86bot 功能使用指南合集
@@ -27,6 +27,7 @@ updated: 2026-09-21
 |      **CHUNITHM**    | CHUNITHM（中二节奏）插件使用帮助          |    [点击跳转](#chunithm)    |
 | **舞萌DX（NoneBot）** | nonebot_plugin_maimaidx 插件使用帮助 | [点击跳转](#maimai-nonebot) |
 | **舞立方 DanceFeng** | dancefengbot 插件使用帮助 | [点击跳转](#dancefeng) |
+| **osu! / osu!mania** | osu! 插件与 mania 工具箱使用帮助 | [点击跳转](#osu) |
 
 ***
 
@@ -1255,6 +1256,167 @@ sakura 162993657
 
 ***
 
+<a name="osu"></a>
+
+#  osu! 插件使用帮助
+
+> osu!（含 osu!mania）相关功能分两部分：
+>
+> 1. **日常查分 / 通用指令**：见官方帮助文档 **<https://docs.365246692.xyz/help/>**；
+> 2. **osu!mania 高级分析工具箱**：插件 [nonebot-plugin-osumania-toolkit](https://github.com/LeoBlackMT/nonebot-plugin-osumania-toolkit)，命令为 `/omtk` 系列。
+>
+> 工具箱命令**都带斜杠**（如 `/mapview`），且多数需要「回复一条含谱面/回放文件的消息」后再发命令。
+
+## osu! - 官方帮助文档（日常指令）
+
+查成绩、玩家信息、谱面搜索、群排行榜、猜歌等常用指令都在帮助站，按首字母与分类排列，点击卡片进入对应文章：
+
+👉 **<https://docs.365246692.xyz/help/>**
+
+## osu! - mania 工具箱总览
+
+发送 `/omtk` 查看主菜单；发送 `/omtk <命令名> [页码]` 查看某条命令的详细用法。
+
+| 指令 | 别名 | 功能 |
+| :--- | :--- | :--- |
+| `/omtk` | — | 工具箱帮助菜单；`/omtk <命令名> [页码]` 看详情 |
+| `/mapview` | `/rework` | 谱面键型分析与难度估计 |
+| `/pressingtime` | `/按压` | 回放按键时长分布 |
+| `/analyze` | `/分析`、`/analyse` | 作弊分析（多维度） |
+| `/delta` | `/偏差` | 判定偏差柱状图 |
+| `/lifebar` | `/血条`、`/life` | 血条变化折线图 |
+| `/spectrum` | `/频谱` | 回放打击频谱 |
+| `/scatter` | `/散点` | 判定位置散点图 |
+| `/pattern` | `/键型` | 谱面键型分析 |
+| `/percy` | `/投皮` | LN 皮肤「投机取巧程度」修改 |
+| `/acc` | `/单曲` | 单曲 ACC 计算 / 推算 |
+| `/ett` | `/msd` | Etterna（MinaCalc）难度计算 |
+| `/cvtscore` | `/转换` | 按目标规则重算回放成绩 |
+| `/omtk report` | — | 反馈问题（跳转 GitHub Issues） |
+
+## osu! - 谱面分析：`/mapview`（别名 `/rework`）
+
+命令格式：
+
+```text
+/mapview b<bid> +[mods] x[speed] OD[OD]
+```
+
+示例：
+
+```text
+/mapview b4094064 +EZHO x1.25
+/mapview b4094064 +IN OD8
+```
+
+| 参数 | 写法 | 说明 |
+| :--- | :--- | :--- |
+| bid | `b` + 整数 | 从官网获取谱面；也可直接输入谱面网址 |
+| mods | `+` 开头 | 支持 `HR/EZ`、`DT/HT`、`IN/HO`、`DC/NC`，大小写不敏感 |
+| speed | `x` / `*` / `×` 开头 | 倍速，范围 0.25–3.0 |
+| OD | `OD` 开头 | OD 覆写，范围 -15–15 |
+
+也可**回复**一条含 `.osu`/`.mc`（或 `.osz`/`.mcz` 图包）的消息再发 `/mapview`；回复文件时会忽略 bid。图包分析开销大，请勿滥用。
+
+## osu! - 回放图表类
+
+以下命令都需要**回复一条含 `.osr`/`.mr` 回放文件的消息**，再发送命令：
+
+| 指令 | 别名 | 说明 |
+| :--- | :--- | :--- |
+| `/pressingtime` | `/按压` | 按键时长分布图 |
+| `/spectrum` | `/频谱` | 打击频谱图 |
+| `/lifebar` | `/血条`、`/life` | 血条变化折线图（回复 `.osr`） |
+| `/delta` | `/偏差` | 判定偏差柱状图（按列着色） |
+| `/scatter` | `/散点` | 判定位置二维散点图 |
+
+`/delta` 与 `/scatter` 可同时用 `b<bid>`（或网址）指定谱面，例如 `/delta b4094064`（同时回复回放）。
+
+## osu! - 作弊分析：`/analyze`（别名 `/分析`）
+
+> ⚠️ 该命令开销较大，请勿滥用；结果为算法生成，仅供参考。
+
+命令格式：`/analyze [-reason] [b<bid>]`
+
+- 回复 `.osr`/`.mr` 可触发分析；指定 bid（或输入网址）会直接分析 delta_t；未指定 bid 时可继续发送 `.osu`/`.mc` 或输入 `1` 执行无谱面分析；
+- `-reason`：未检测到作弊时也输出分析详情（作弊 / 可疑时始终输出）；
+- 提供谱面时生成四格图：按压时长分布、脉冲序列频谱、delta_t 直方图、delta_t 散点图；不提供谱面时只生成前两张；
+- 文本按「时域与按压时长」「脉冲序列」「偏移」三块给结论，异常会标记 `<!>`（作弊）或 `<*>`（可疑）。
+
+示例：`/analyze b4094064`
+
+## osu! - 键型分析：`/pattern`（别名 `/键型`）
+
+- 用法 1：回复含 `.osu`/`.mc`/`.osz`/`.mcz` 的消息，再发 `/pattern`；
+- 用法 2：直接 `pattern b<bid>`，如 `/pattern b4094064`；
+- 加 `-d` 或 `-detail` 获取详细结果（以合并转发发送）。
+
+> LN 键型分析处于实验性状态。
+
+## osu! - Etterna 难度：`/ett`（别名 `/msd`）
+
+命令格式：`/ett b<bid> x[speed]`，示例 `/ett b4094064 x1.25`。
+
+- 也可回复 `.osu`/`.mc` 或 `.osz`/`.mcz` 文件（回复文件时忽略 bid）；
+- 仅支持 rate（如 `x1.5`），不支持 mods、OD 覆写和 `IN/HO`；
+- 使用 Etterna 0.74.0 MinaCalc，结果仅供参考。
+
+## osu! - 单曲 ACC：`/acc`（别名 `/单曲`）
+
+两种用法：
+
+1. 直接命令：
+
+```text
+/acc [-r] <段位名> <acc>
+/acc [-r] b<bid> [单曲个数] <acc> [-sv2]
+```
+
+2. 交互模式：直接发送 `/acc [-r]`，按提示操作。
+
+说明：
+
+- 用 `-` 分隔 acc，如 `99.4-99.3-98.8-97.6`；用半角 `,` 分隔自定义物量，如 `1145,1419,1981`；
+- 支持上传 `.osu`/`.mc` 谱面文件；
+- `-sv2` 启用 sv2 模组；`-r` 反向计算（通过单曲 ACC 推算段内变化，仅首次命令可用）；
+- 指定 bid 仅首次命令可用，可用网址代替。
+
+段位列表：`/omtk acc 2`（可用段位）、`/omtk acc 3`（全部内置段位）。
+
+## osu! - 成绩转换：`/cvtscore`（别名 `/转换`）
+
+输入：回放（`.osr`/`.mr`） + 谱面（`b<bid>` 或 `.osu`/`.mc`） + 目标 ruleset。
+
+示例：
+
+```text
+/cvtscore Quaver/chill sc diff4     # 然后发送回放
+/cvtscore b4094064 -sv2             # 然后发送回放和谱面
+/cvtscore                            # 交互模式
+```
+
+- 目标 ruleset 写法：模板优先（如 `sc diff4`、`wife3 j7`），具体规则用 `Group/Name`（如 `Quaver/chill`）；
+- `-sv2` / `sv2` / `+sv2` 开启 sv2，`-nosv2` / `nosv2` / `sv1` 关闭；
+- 参数大小写不敏感；`/omtk cvtscore 2` 看参数详解、`/omtk cvtscore 3` 看全部 ruleset。
+
+## osu! - 投皮修改：`/percy`（别名 `/投皮`）
+
+回复一条含 `.png` 图片的消息，同时发送 `/percy [d] [lazer|lzr]`（建议用文件发送，避免被压缩）。
+
+- `d`：目标投机取巧程度（整数），不填则仅识别并返回当前程度；
+- `lazer` / `lzr`：按 Lazer 规则处理与显示（会做 -75px 修正、下限 0，图片长度固定 32800px）。
+
+示例：`/percy`、`/percy 150`、`/percy 225 lzr`
+
+> 暂不支持渐变颜色面身、非单一颜色、身尾分离或含图案的面身；需要批处理 / 修复面尾白线请用 `LeoBlackMT/percy_skin_editor`。
+
+## osu! - 反馈与部署提示
+
+- 反馈：`/omtk report`，或到 [Issues](https://github.com/LeoBlackMT/nonebot-plugin-osumania-toolkit/issues/new) 提交。
+- 部署：本工具箱是 NoneBot2 插件（`nonebot-plugin-osumania-toolkit`）；Unix 系统上需给 `algorithm/ett/official_minaclac_runner` 加执行权限（`chmod +x`）才能正常使用 `/ett`；若图包分析触发段错误崩溃，可执行 `pip uninstall uvloop` 规避。
+
+***
+
 ## 附录：舞萌插件更新公告（相对 `maimaidx-plugin-edit-main` 旧版）
 
 以下为可直接发群/动态的示例，可按需删改链接与 Bot 名。
@@ -1275,4 +1437,4 @@ sakura 162993657
 
 ***
 
-*文档最后更新时间：2026-09-21*
+*文档最后更新时间：2026-09-24*
