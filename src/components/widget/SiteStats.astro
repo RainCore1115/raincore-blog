@@ -20,6 +20,9 @@ const { class: className, style } = Astro.props;
 // 从配置中获取站点开始日期
 const siteStartDate = siteConfig.siteStartDate || "2025-01-01";
 
+// Umami 公开分享入口（可选，用于查看访问统计）
+const umamiShareUrl = siteConfig.analytics?.umamiShareUrl;
+
 // 获取所有文章
 const posts = await getSortedPosts();
 const categories = await getCategoryList();
@@ -129,6 +132,28 @@ const stats = [
         </div>
       </div>
     ))}
+    {umamiShareUrl && (
+      <a
+        href={umamiShareUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="打开访问统计（Umami）"
+        class="flex items-center justify-between px-3 py-1.5 group"
+      >
+        <div class="flex items-center gap-2.5">
+          <div class="text-(--primary) text-xl">
+            <Icon name="material-symbols:monitoring" />
+          </div>
+          <span class="text-neutral-700 dark:text-neutral-300 font-medium text-sm">
+            访问统计
+          </span>
+        </div>
+        <Icon
+          name="material-symbols:open-in-new"
+          class="text-neutral-400 dark:text-neutral-500 group-hover:text-(--primary) transition-colors"
+        />
+      </a>
+    )}
   </div>
 </WidgetLayout>
 

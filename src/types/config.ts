@@ -113,6 +113,7 @@ export type SiteConfig = {
 		umamiScriptUrl?: string; // Umami 统计脚本地址（自建），如 https://u.a.07210700.xyz/script.js
 		umamiWebsiteId?: string; // Umami data-website-id
 		umamiRecorderUrl?: string; // Umami 会话录制脚本地址（可选），如 https://u.a.07210700.xyz/recorder.js
+		umamiShareUrl?: string; // Umami 公开分享地址（可选），在「站点统计」中提供访问统计入口
 	};
 
 	// 图片优化配置

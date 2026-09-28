@@ -80,8 +80,8 @@ export const siteConfig: SiteConfig = {
 		followTheme: false,
 	},
 
-	// 站点开始日期，用于统计运行天数
-	siteStartDate: "2025-01-01",
+	// 站点开始日期，用于统计运行天数（取仓库首次提交日期）
+	siteStartDate: "2026-04-21",
 
 	// 站点时区（IANA 时区字符串），用于格式化bangumi、rss里的构建日期时间等等..
 	// 示例："Asia/Shanghai", "UTC", 如果为空，则按照构建服务器的时区进行时区转换
@@ -164,6 +164,8 @@ export const siteConfig: SiteConfig = {
 		umamiWebsiteId: "8b381dd6-7307-4a57-936f-1cfa3e96f4dc",
 		// Umami 会话录制脚本地址（可选），留空则不加载
 		umamiRecorderUrl: "https://u.a.07210700.xyz/recorder.js",
+		// Umami 公开分享地址（在「站点统计」中提供入口），留空则不显示
+		umamiShareUrl: "https://u.a.07210700.xyz/share/tOwoYuc6fR70LBSP",
 	},
 
 	// 图像优化及响应式配置
