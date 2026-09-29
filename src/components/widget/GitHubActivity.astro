@@ -1,30 +1,343 @@
 ---
 import WidgetLayout from "@/components/common/WidgetLayout.astro";
 import { profileConfig } from "@/config/profileConfig";
+
+const username = profileConfig.githubUsername || "";
 ---
 
 <WidgetLayout name="雨核在github干嘛" id="github-activity">
-    <div id="github-activity-feed"></div>
+    <div class="gh-feed-root" data-username={username}>
+        <div class="gh-hint">加载中...</div>
+    </div>
 </WidgetLayout>
 
-<script define:vars={{ username: profileConfig.githubUsername }}>
-    function loadGitHubActivity() {
-        if (username) {
-            const feedEl = document.getElementById('github-activity-feed');
-            if (feedEl) {
-                feedEl.innerHTML = '';
-            }
-            GitHubActivity.feed({
-                username: username,
-                selector: "#github-activity-feed",
-                limit: 5,
-            });
+<script>
+    import { renderIcon } from "../../utils/widget-icons";
+
+    // GitHub 公开事件 API（无需 token，未登录限流 60 次/小时/IP）
+    // 为避免刷新页面就打满限流：结果缓存到 localStorage（10 分钟），并发请求也会合并。
+    const API = "https://api.github.com";
+    const PER_PAGE = 24; // 拉多一点用于过滤（部分事件会被跳过）
+    const SHOW = 6; // 实际展示条数
+    const CACHE_TTL = 10 * 60 * 1000;
+
+    interface GhEvent {
+        id?: string;
+        type?: string;
+        created_at?: string;
+        repo?: { name?: string };
+        payload?: Record<string, any>;
+    }
+
+    interface GhItem {
+        icon: string;
+        repo: string;
+        /** 动作描述，例如「推送了代码」 */
+        action: string;
+        /** 补充信息，例如分支名或提交短哈希 */
+        detail: string;
+        time: string;
+        url: string;
+    }
+
+    /** 各事件类型对应的展示配置 */
+    const EVENT_MAP: Record<
+        string,
+        { icon: string; text: (p: Record<string, any>) => string }
+    > = {
+        PushEvent: {
+            icon: "github-push",
+            // 具体文案在 describe() 里按 payload 覆盖（公开事件流拿不到提交条数）
+            text: () => "推送了代码",
+        },
+        CreateEvent: {
+            icon: "github-create",
+            text: (p) => {
+                const kind =
+                    p?.ref_type === "tag"
+                        ? "标签"
+                        : p?.ref_type === "branch"
+                          ? "分支"
+                          : "仓库";
+                return p?.ref ? `创建了${kind} ${p.ref}` : `创建了${kind}`;
+            },
+        },
+        DeleteEvent: {
+            icon: "github-delete",
+            text: (p) =>
+                `删除了${p?.ref_type === "tag" ? "标签" : "分支"} ${p?.ref ?? ""}`.trim(),
+        },
+        WatchEvent: { icon: "github-star", text: () => "Star 了仓库" },
+        ForkEvent: { icon: "github-fork", text: () => "Fork 了仓库" },
+        IssuesEvent: {
+            icon: "github-issue",
+            text: (p) => `${issueAction(p?.action)} Issue #${p?.issue?.number ?? ""}`,
+        },
+        IssueCommentEvent: {
+            icon: "github-comment",
+            text: (p) => `评论了 Issue #${p?.issue?.number ?? ""}`,
+        },
+        PullRequestEvent: {
+            icon: "github-pr",
+            text: (p) =>
+                p?.pull_request?.merged
+                    ? `合并了 PR #${p?.pull_request?.number ?? ""}`
+                    : `${prAction(p?.action)} PR #${p?.pull_request?.number ?? ""}`,
+        },
+        PullRequestReviewEvent: {
+            icon: "github-pr",
+            text: (p) => `评审了 PR #${p?.pull_request?.number ?? ""}`,
+        },
+        PullRequestReviewCommentEvent: {
+            icon: "github-comment",
+            text: (p) => `评论了 PR #${p?.pull_request?.number ?? ""}`,
+        },
+        CommitCommentEvent: {
+            icon: "github-comment",
+            text: () => "评论了提交",
+        },
+        ReleaseEvent: {
+            icon: "github-release",
+            text: (p) => `发布了 ${p?.release?.tag_name ?? "新版本"}`,
+        },
+        PublicEvent: { icon: "github-public", text: () => "公开了仓库" },
+        MemberEvent: {
+            icon: "github-member",
+            text: (p) =>
+                `${p?.action === "removed" ? "移除了" : "添加了"}协作者 ${p?.member?.login ?? ""}`.trim(),
+        },
+        GollumEvent: { icon: "github-wiki", text: () => "更新了 Wiki" },
+        SponsorshipEvent: { icon: "github-star", text: () => "赞助了项目" },
+    };
+
+    function issueAction(action?: string): string {
+        if (action === "closed") return "关闭了";
+        if (action === "reopened") return "重新打开了";
+        return "打开了";
+    }
+
+    function prAction(action?: string): string {
+        // GitHub 合并 PR 的 action 也是 closed，merged 标记在 describe() 里单独处理
+        if (action === "closed") return "关闭了";
+        if (action === "reopened") return "重新打开了";
+        return "打开了";
+    }
+
+    function formatRelative(iso?: string): string {
+        if (!iso) return "";
+        const t = new Date(iso).getTime();
+        if (Number.isNaN(t)) return "";
+        const diff = Date.now() - t;
+        if (diff < 0) return "刚刚";
+        const sec = Math.floor(diff / 1000);
+        if (sec < 60) return "刚刚";
+        const min = Math.floor(sec / 60);
+        if (min < 60) return `${min} 分钟前`;
+        const hour = Math.floor(min / 60);
+        if (hour < 24) return `${hour} 小时前`;
+        const day = Math.floor(hour / 24);
+        if (day < 30) return `${day} 天前`;
+        const month = Math.floor(day / 30);
+        if (month < 12) return `${month} 个月前`;
+        return `${Math.floor(month / 12)} 年前`;
+    }
+
+    /** 从提交信息里取第一行，避免撑破侧栏 */
+    function firstLine(text?: string, max = 46): string {
+        if (!text) return "";
+        const line = String(text).trim().split("\n")[0].trim();
+        return line.length > max ? `${line.slice(0, max - 1)}…` : line;
+    }
+
+    function describe(ev: GhEvent): GhItem | null {
+        const type = ev.type || "";
+        const conf = EVENT_MAP[type];
+        const repo = ev.repo?.name || "";
+        if (!repo) return null;
+
+        // 未知事件类型就不展示，避免出现无意义的空白行
+        if (!conf) return null;
+
+        const p = ev.payload || {};
+        const repoUrl = `https://github.com/${repo}`;
+        let action = conf.text(p);
+        let detail = "";
+        let url = repoUrl;
+
+        if (type === "PushEvent") {
+            // 注意：GitHub 公开事件流里 PushEvent 不再返回 commits/size，
+            // 只剩 ref/head/before，所以拿不到提交条数时退化成「推送了代码」。
+            const commits = Array.isArray(p.commits) ? p.commits : [];
+            const count = commits.length || p.distinct_size || p.size || 0;
+            action = count > 0 ? `推送了 ${count} 个提交` : "推送了代码";
+            const branch = String(p.ref || "").replace("refs/heads/", "");
+            const extra = commits.length
+                ? firstLine(commits[commits.length - 1]?.message)
+                : String(p.head || "").slice(0, 7);
+            detail = [branch, extra].filter(Boolean).join(" · ");
+            if (p.head) url = `${repoUrl}/commit/${p.head}`;
+        } else if (type === "CreateEvent") {
+            detail = p.ref_type === "repository" ? "" : String(p.ref || "");
+        } else if (type === "DeleteEvent") {
+            detail = String(p.ref || "");
+        } else if (type === "IssuesEvent" || type === "IssueCommentEvent") {
+            detail = firstLine(p.issue?.title);
+            if (p.issue?.html_url) url = p.issue.html_url;
+        } else if (
+            type === "PullRequestEvent" ||
+            type === "PullRequestReviewEvent" ||
+            type === "PullRequestReviewCommentEvent"
+        ) {
+            detail = firstLine(p.pull_request?.title);
+            if (p.pull_request?.html_url) url = p.pull_request.html_url;
+        } else if (type === "ReleaseEvent") {
+            detail = firstLine(p.release?.name);
+            if (p.release?.html_url) url = p.release.html_url;
+        } else if (type === "CommitCommentEvent") {
+            detail = String(p.comment?.commit_id || "").slice(0, 7);
+            if (p.comment?.html_url) url = p.comment.html_url;
+        }
+
+        return {
+            icon: conf.icon,
+            repo,
+            action,
+            detail,
+            time: formatRelative(ev.created_at),
+            url,
+        };
+    }
+
+    function escapeHtml(value: string): string {
+        return value
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
+    function render(root: HTMLElement, items: GhItem[]) {
+        if (!items.length) {
+            root.innerHTML =
+                '<div class="gh-hint">最近没有公开活动 <span class="gh-hint-sub">（可能只提交到了私有仓库）</span></div>';
+            return;
+        }
+        root.innerHTML = items
+            .map(
+                (it) => `
+        <a class="gh-item" href="${escapeHtml(it.url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(`${it.repo} · ${it.action}`)}">
+          <span class="gh-icon">${renderIcon(it.icon, 16)}</span>
+          <span class="gh-body">
+            <span class="gh-repo">${escapeHtml(it.repo)}</span>
+            <span class="gh-action">${escapeHtml(it.action)}</span>
+            ${it.detail ? `<span class="gh-detail">${escapeHtml(it.detail)}</span>` : ""}
+          </span>
+          <span class="gh-time">${escapeHtml(it.time)}</span>
+        </a>`,
+            )
+            .join("");
+    }
+
+    function readCache(key: string): GhItem[] | null {
+        try {
+            const raw = localStorage.getItem(key);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (Date.now() - parsed.timestamp < CACHE_TTL) return parsed.value;
+            localStorage.removeItem(key);
+        } catch {
+            localStorage.removeItem(key);
+        }
+        return null;
+    }
+
+    function writeCache(key: string, value: GhItem[]) {
+        try {
+            localStorage.setItem(
+                key,
+                JSON.stringify({ timestamp: Date.now(), value }),
+            );
+        } catch {
+            /* 隐私模式下 localStorage 可能不可用 */
         }
     }
 
-    loadGitHubActivity();
+    /** 同一个用户名的并发请求合并成一次（桌面端 + 移动端两份侧栏会同时初始化） */
+    const inflight = new Map<string, Promise<GhItem[]>>();
 
-    setInterval(loadGitHubActivity, 30 * 60 * 1000);
+    async function requestEvents(username: string): Promise<GhItem[]> {
+        const res = await fetch(
+            `${API}/users/${encodeURIComponent(username)}/events/public?per_page=${PER_PAGE}`,
+            { headers: { Accept: "application/vnd.github+json" } },
+        );
+        if (res.status === 403 || res.status === 429) {
+            throw new Error("RATE_LIMIT");
+        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data: GhEvent[] = await res.json();
+        if (!Array.isArray(data)) throw new Error("返回格式异常");
+
+        const items = data
+            .map(describe)
+            .filter((v): v is GhItem => !!v)
+            .slice(0, SHOW);
+
+        writeCache(`firefly-gh-events:${username}`, items);
+        return items;
+    }
+
+    function fetchEvents(username: string): Promise<GhItem[]> {
+        const existing = inflight.get(username);
+        if (existing) return existing;
+        const task = requestEvents(username).finally(() => {
+            inflight.delete(username);
+        });
+        inflight.set(username, task);
+        return task;
+    }
+
+    async function load(root: HTMLElement, username: string) {
+        const cached = readCache(`firefly-gh-events:${username}`);
+        if (cached) render(root, cached);
+
+        try {
+            render(root, await fetchEvents(username));
+        } catch (error) {
+            console.error("加载 GitHub 活动失败:", error);
+            if (!cached) {
+                root.innerHTML = `<div class="gh-hint">${
+                    (error as Error)?.message === "RATE_LIMIT"
+                        ? "GitHub 接口限流了，稍后再试"
+                        : "GitHub 活动加载失败"
+                }</div>`;
+            }
+        }
+    }
+
+    function init() {
+        // 桌面端和移动端各有一份侧栏，必须遍历所有实例初始化，
+        // 不能用 getElementById（重复 id 只会命中第一个）。
+        document.querySelectorAll<HTMLElement>(".gh-feed-root").forEach((root) => {
+            if (root.dataset.bound === "1") return;
+            const username = root.dataset.username || "";
+            if (!username) {
+                root.innerHTML = "";
+                return;
+            }
+            root.dataset.bound = "1";
+            void load(root, username);
+        });
+    }
+
+    init();
+    document.addEventListener("astro:page-load", init);
+    document.addEventListener("astro:after-swap", () => {
+        document
+            .querySelectorAll<HTMLElement>(".gh-feed-root")
+            .forEach((root) => delete root.dataset.bound);
+        init();
+    });
 </script>
 
 <style is:global>
@@ -34,57 +347,97 @@ import { profileConfig } from "@/config/profileConfig";
         box-shadow: none !important;
     }
 
-    /* 移除 github-activity-feed 插件的所有内部边框 */
-    #github-activity-feed .gha-feed,
-    #github-activity-feed .gha-header,
-    #github-activity-feed .gha-activity {
-        border: none !important;
+    .gh-feed-root {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
     }
 
-    #github-activity-feed .gha-feed {
-        padding-top: 0;
-        background: transparent !important;
+    .gh-feed-root .gh-hint {
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        padding: 0.5rem 0;
     }
 
-    /* 隐藏头部, 页脚, 和空白占位符 */
-    .gha-header,
-    .gha-footer,
-    .gha-push,
-    .gha-push-small {
-        display: none !important;
+    .gh-feed-root .gh-hint-sub {
+        font-size: 0.75rem;
+        opacity: 0.75;
     }
 
-    /* 亮色模式样式 */
-    #github-activity-feed .gha-activity {
-        background: var(--card-bg) !important;
-        color: var(--text-content) !important;
+    .gh-feed-root .gh-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.4rem 0.45rem;
+        border-radius: 0.5rem;
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+        text-decoration: none;
+        min-width: 0;
     }
 
-    #github-activity-feed .gha-activity a {
-        color: var(--primary) !important;
+    .gh-feed-root .gh-item:hover {
+        background-color: var(--btn-plain-bg-hover);
     }
 
-    #github-activity-feed .gha-activity .time {
-        color: var(--text-secondary) !important;
+    .gh-feed-root .gh-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 0.4rem;
+        background-color: var(--btn-regular-bg);
+        color: var(--primary);
+        margin-top: 0.1rem;
     }
 
-    /* 暗色模式样式覆盖 */
-    :root.dark #github-activity-feed .gha-feed,
-    :root.dark #github-activity-feed .gha-activity {
-        background: transparent !important;
-        color: var(--text-content) !important;
+    .gh-feed-root .gh-body {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        flex: 1;
+        line-height: 1.25;
     }
 
-    :root.dark #github-activity-feed .gha-activity a {
-        color: var(--primary) !important;
+    .gh-feed-root .gh-repo {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--text-title);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    :root.dark #github-activity-feed .gha-activity .time {
-        color: var(--text-secondary) !important;
+    .gh-feed-root .gh-item:hover .gh-repo {
+        color: var(--primary);
     }
 
-    /* 确保活动项在暗色模式下正确显示 */
-    :root.dark #github-activity-feed .gha-activity-icon {
-        filter: invert(1);
+    .gh-feed-root .gh-action {
+        font-size: 0.75rem;
+        color: var(--text-content);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .gh-feed-root .gh-detail {
+        font-size: 0.6875rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .gh-feed-root .gh-time {
+        flex-shrink: 0;
+        font-size: 0.6875rem;
+        color: var(--text-secondary);
+        margin-left: auto;
+        padding-top: 0.15rem;
+        white-space: nowrap;
     }
 </style>
