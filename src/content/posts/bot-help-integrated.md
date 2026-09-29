@@ -1,7 +1,7 @@
 ---
 title: baka86bot 音游查分食用教程
-description: "整合4K准度计算器、osu!/osu!mania、舞萌DX（Yunzai 与 NoneBot 双版本）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
-tags: [bot, 4k, osu, osu!mania, osumania, maimai, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
+description: "整合4K准度计算器、osu!/osu!mania/Malody、舞萌DX（Yunzai 与 NoneBot 双版本）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
+tags: [bot, 4k, osu, osu!mania, osumania, malody, maimai, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
 published: 2026-04-24
@@ -27,7 +27,7 @@ updated: 2026-09-28
 |      **CHUNITHM**    | CHUNITHM（中二节奏）插件使用帮助          |    [点击跳转](#chunithm)    |
 | **舞萌DX（NoneBot）** | nonebot_plugin_maimaidx 插件使用帮助 | [点击跳转](#maimai-nonebot) |
 | **舞立方 DanceFeng** | dancefengbot 插件使用帮助 | [点击跳转](#dancefeng) |
-| **osu! / osu!mania** | osu! 插件与 mania 工具箱使用帮助 | [点击跳转](#osu) |
+| **osu! / Malody** | osu! 与 Malody 插件使用帮助 | [点击跳转](#osu) |
 
 ***
 
@@ -848,12 +848,14 @@ prp b50
 
 <a name="osu"></a>
 
-#  osu! 插件使用帮助
+#  osu! / Malody 插件使用帮助
 
-> osu!（含 osu!mania）相关功能分两部分：
+> osu!（含 osu!mania）与 Malody 相关功能分两部分：
 >
 > 1. **日常查分 / 通用指令**：见官方帮助文档 **<https://docs.365246692.xyz/help/>**；
 > 2. **osu!mania 高级分析工具箱**：插件 [nonebot-plugin-osumania-toolkit](https://github.com/LeoBlackMT/nonebot-plugin-osumania-toolkit)，命令为 `/omtk` 系列。
+>
+> 工具箱除 osu! 谱面（`.osu` / `.osz`）外，同样支持 **Malody 谱面**（`.mc` / `.mcz` 图包），并可用 `/cvtscore` 在不同游戏之间转换成绩。
 >
 > 工具箱命令**都带斜杠**（如 `/mapview`），且多数需要「回复一条含谱面/回放文件的消息」后再发命令。
 
