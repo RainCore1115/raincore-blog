@@ -135,27 +135,42 @@ TS_PATTERNS = [
 ]
 LIT = re.compile(r"""['"]([^'"]+)['"]""")
 
-for plugin in out["loaded"]:
-    d = os.path.join(sp, plugin)
-    if not os.path.isdir(d):
-        d = os.path.join(sp, plugin.replace("-", "_"))
+def _collect(target):
     cmds = set()
-    if os.path.isdir(d):
-        for root, dirs, files in os.walk(d):
+    files = []
+    if os.path.isdir(target):
+        for root, dirs, fs in os.walk(target):
             dirs[:] = [x for x in dirs if x != "__pycache__"]
-            for fn in files:
-                if not fn.endswith(".py"):
-                    continue
-                try:
-                    src = open(os.path.join(root, fn), encoding="utf-8", errors="ignore").read()
-                except OSError:
-                    continue
-                for pat in CMD_PATTERNS:
-                    cmds.update(re.findall(pat, src))
-                for pat in TS_PATTERNS:
-                    for grp in re.findall(pat, src):
-                        cmds.update(LIT.findall(grp))
-    out["plugins"][plugin] = {"triggers": sorted(c for c in cmds if c.strip())}
+            files += [os.path.join(root, f) for f in fs if f.endswith(".py")]
+    elif os.path.isfile(target):
+        files = [target]
+    for path in files:
+        try:
+            src = open(path, encoding="utf-8", errors="ignore").read()
+        except OSError:
+            continue
+        for pat in CMD_PATTERNS:
+            cmds.update(re.findall(pat, src))
+        for pat in TS_PATTERNS:
+            for grp in re.findall(pat, src):
+                cmds.update(LIT.findall(grp))
+    return sorted(c for c in cmds if c.strip())
+
+out["missing"] = []
+for plugin in out["loaded"]:
+    alt = plugin.replace("-", "_")
+    cands = []
+    for base in (sp, NB):
+        if not base:
+            continue
+        for name in (plugin, alt):
+            cands += [os.path.join(base, name), os.path.join(base, name + ".py")]
+    found = next((c for c in cands if os.path.exists(c)), None)
+    out["plugins"][plugin] = {"triggers": _collect(found) if found else []}
+    if not found:
+        out["missing"].append(plugin)
+
+out["missing"] = sorted(out["missing"])
 
 print(json.dumps(out, ensure_ascii=False))
 '''
@@ -268,6 +283,9 @@ def build_report(old: dict | None, new: dict) -> str:
 
     loaded = meta.get("nonebot_loaded") or []
     installed = meta.get("nonebot_installed") or []
+    missing = meta.get("nonebot_missing") or []
+    if missing:
+        lines.append(f"⚠️ [NoneBot] bot.py 里 load 了但找不到源码（可能加载失败）：{', '.join(missing)}")
     if installed:
         not_loaded = sorted(set(installed) - set(loaded))
         if not_loaded:
@@ -284,6 +302,7 @@ def scan_all() -> dict:
         "nonebot": nb.get("plugins") or {},
         "meta": {
             "nonebot_loaded": nb.get("loaded") or [],
+            "nonebot_missing": nb.get("missing") or [],
             "nonebot_installed": nb.get("installed") or [],
             "nonebot_site_packages": nb.get("site_packages") or "",
             "nonebot_error": nb.get("error"),
