@@ -32,7 +32,97 @@ CREDENTIALS = os.environ.get(
 
 SKIP_DIRS = {"node_modules", "data", "__pycache__", ".git", "config"}
 TRIGGER_KEY = re.compile(r"\b(reg|rule)\s*:")
-LITERAL = re.compile(r"""'([^']*)'|"([^"]*)"|/((?:[^/\\\n]|\\.)+)/""")
+CONST_ASSIGN = re.compile(r"(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=")
+IDENT_RE = re.compile(r"[A-Za-z_$][A-Za-z0-9_$]*")
+# 正则字面量可能出现的起始位置（前一个非空白字符）
+REGEX_PREV = set("=([,:!&|?{};+*%<>~^")
+
+
+def _skip_string(s: str, i: int) -> int:
+    """s[i] 是引号，返回字符串结束后的下标。"""
+    q, j = s[i], i + 1
+    while j < len(s):
+        if s[j] == "\\":
+            j += 2
+            continue
+        if s[j] == q:
+            return j + 1
+        j += 1
+    return len(s)
+
+
+def _regex_end(s: str, i: int):
+    """s[i] == '/'，返回 JS 正则字面量结束位置（含 flags）；不合法返回 None。
+
+    正确处理字符类里的 '/'（如 /[#/]/）与转义 '\\/'。
+    """
+    j, in_class = i + 1, False
+    while j < len(s):
+        c = s[j]
+        if c == "\\":
+            j += 2
+            continue
+        if c == "\n":
+            return None
+        if in_class:
+            if c == "]":
+                in_class = False
+        elif c == "[":
+            in_class = True
+        elif c == "/":
+            j += 1
+            while j < len(s) and s[j].isalpha():
+                j += 1
+            return j
+        j += 1
+    return None
+
+
+def js_tokens(region: str) -> list[tuple[str, str]]:
+    """扫描 JS 片段，产出 ('str'|'re'|'ident', 原文) 三类 token。"""
+    out: list[tuple[str, str]] = []
+    i, n = 0, len(region)
+    while i < n:
+        c = region[i]
+        if c in "'\"":
+            j = _skip_string(region, i)
+            out.append(("str", region[i + 1 : j - 1]))
+            i = j
+        elif c == "/":
+            prev = region[:i].rstrip()[-1:]
+            if prev in REGEX_PREV or not prev:
+                end = _regex_end(region, i)
+                if end:
+                    out.append(("re", region[i:end]))
+                    i = end
+                    continue
+            i += 1
+        elif c in "_$" or c.isascii() and c.isalpha():
+            m = IDENT_RE.match(region, i)
+            out.append(("ident", m.group(0)))
+            i = m.end()
+        else:
+            i += 1
+    return out
+
+
+def _reg_value_tokens(rest: str) -> list[tuple[str, str]]:
+    """取 reg:/rule: 之后的值 token：数组取整个 []，否则只取第一个 token。
+
+    避免把同一行后续 `fnc: 'onSwitchOff'` 之类的字符串误当成触发词。
+    """
+    s = rest.lstrip()
+    if s.startswith("["):
+        depth = 0
+        for i, ch in enumerate(s):
+            if ch == "[":
+                depth += 1
+            elif ch == "]":
+                depth -= 1
+                if depth == 0:
+                    return js_tokens(s[: i + 1])
+        return js_tokens(s)
+    return js_tokens(s)[:1]
 
 
 # --------------------------------------------------------------------------- #
@@ -45,14 +135,26 @@ def extract_yunzai_triggers(path: str) -> list[str]:
             text = fh.read()
     except OSError:
         return []
+    # 先收集 const XXX = /regex/ 或 'string'，供 reg: XXX 间接引用解析
+    consts: dict[str, str] = {}
     for line in text.splitlines():
-        if not TRIGGER_KEY.search(line):
+        m = CONST_ASSIGN.search(line)
+        if not m:
             continue
-        for m in LITERAL.finditer(line):
-            val = m.group(1) or m.group(2) or m.group(3) or ""
-            val = val.strip()
-            if val:
-                found.add(val)
+        toks = js_tokens(line[m.end() :])
+        if toks and toks[0][0] in ("re", "str"):
+            consts[m.group(1)] = toks[0][1]
+
+    for line in text.splitlines():
+        key = TRIGGER_KEY.search(line)
+        if not key:
+            continue
+        for kind, val in _reg_value_tokens(line[key.end() :]):
+            if kind in ("re", "str"):
+                if val.strip():
+                    found.add(val.strip())
+            elif kind == "ident" and val in consts:
+                found.add(consts[val])
     return sorted(found)
 
 
