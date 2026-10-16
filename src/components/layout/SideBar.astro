@@ -11,6 +11,7 @@ import SidebarTOC from "@/components/widget/SidebarTOC.astro";
 import SiteStats from "@/components/widget/SiteStats.astro";
 import Status from "@/components/widget/Status.astro";
 import Tags from "@/components/widget/Tags.astro";
+import Tokens from "@/components/widget/Tokens.astro";
 import { sidebarLayoutConfig } from "@/config";
 import type {
 	MobileBottomComponentConfig,
@@ -53,6 +54,7 @@ const componentMap = {
 	music: Music,
 	github: GitHubActivity,
 	status: Status,
+	tokens: Tokens,
 } satisfies Record<WidgetComponentType, typeof Profile>;
 
 // 获取侧边栏位置

@@ -381,7 +381,8 @@ export type WidgetComponentType =
 	| "calendar"
 	| "music"
 	| "github"
-	| "status";
+	| "status"
+	| "tokens";
 
 export type WidgetComponentConfig = {
 	type: WidgetComponentType; // 组件类型

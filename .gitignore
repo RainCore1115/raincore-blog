@@ -43,3 +43,7 @@ package/
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# Python 缓存
+__pycache__/
+*.pyc

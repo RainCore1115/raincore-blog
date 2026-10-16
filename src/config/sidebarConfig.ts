@@ -59,6 +59,14 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			showOnPostPage: true,
 		},
 		{
+			// 组件类型：Token 用量（tokens.ci 徽章，点击跳转 @baka86 主页）
+			type: "tokens",
+			enable: true,
+			position: "top",
+			showOnPostPage: true,
+			showOnNonPostPage: true,
+		},
+		{
 			// 组件类型：站点统计（文章/分类/标签/总字数/运行时长/最后活动）
 			// 运行时长取自 siteConfig.siteStartDate（当前 2025-01-01）
 			type: "stats",

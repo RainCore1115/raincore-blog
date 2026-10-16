@@ -1,0 +1,51 @@
+---
+import WidgetLayout from "@/components/common/WidgetLayout.astro";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const { class: className, style } = Astro.props;
+
+// tokens.ci 用户标识
+const TOKENS_USER = "baka86";
+const profileUrl = `https://tokens.ci/u/${TOKENS_USER}`;
+// compact 版式：只展示 Tokens / Cost 两项，尺寸 680×186
+const embedUrl = `https://tokens.ci/api/embed/${TOKENS_USER}/svg?tokens=compact&cost=compact`;
+
+const title = i18n(I18nKey.tokensStats);
+---
+
+<WidgetLayout name={title} id="tokens-stats" class={className} style={style}>
+  <div class="flex flex-col gap-2 pb-1">
+    <a
+      href={profileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={`${title} · tokens.ci`}
+      class="block group"
+    >
+      <img
+        src={embedUrl}
+        alt={`Tokens Stats for @${TOKENS_USER}`}
+        width="680"
+        height="186"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+        class="w-full h-auto rounded-xl transition-transform duration-300 group-hover:scale-[1.015]"
+      />
+    </a>
+    <a
+      href={profileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center justify-center gap-1 text-xs text-neutral-500 dark:text-neutral-400 hover:text-(--primary) transition-colors"
+    >
+      tokens.ci
+    </a>
+  </div>
+</WidgetLayout>

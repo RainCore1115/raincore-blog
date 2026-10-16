@@ -253,6 +253,9 @@ enum I18nKey {
 	siteStatsDays = "siteStatsDays",
 	today = "today",
 
+	// Token 用量组件
+	tokensStats = "tokensStats",
+
 	// 日历组件
 	calendarSunday = "calendarSunday",
 	calendarMonday = "calendarMonday",
