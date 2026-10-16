@@ -1,16 +1,16 @@
 ---
 title: baka86bot 娱乐功能说明
-description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、课程表、在干嘛、命令用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动等"
-tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 课程表, 状态查询, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, 表情包]
+description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动等"
+tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, 表情包]
 category: bot使用帮助
 draft: false
 published: 2026-03-29
-updated: 2026-10-15
+updated: 2026-10-17
 ---
 
 # baka86bot 娱乐功能说明
 
-本文档介绍 baka86bot 的娱乐与实用功能，包括鹿功能签到系统、杯面返还机制、KKB 互动系统，以及戳戳榜、语音触发、肥鱼说、课程表、在干嘛、命令用量、米哈游系列与鸣潮查询、椰羊小工具等。
+本文档介绍 baka86bot 的娱乐与实用功能，包括鹿功能签到系统、杯面返还机制、KKB 互动系统，以及戳戳榜、语音触发、肥鱼说、课程表、在干嘛、命令用量、Token 用量、米哈游系列与鸣潮查询、椰羊小工具等。
 
 > 🎵 **音游相关功能**（4K 准度计算器、osu!/Malody、舞萌DX、Phigros、Rizline、CHUNITHM、舞立方、Paradigm、PJSK）请看另一篇：[baka86bot 音游查分食用教程](/posts/bot-help-integrated/)。
 
@@ -28,6 +28,7 @@ updated: 2026-10-15
   <a href="#课程表" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📅 课程表</a>
   <a href="#在干嘛" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">👀 在干嘛</a>
   <a href="#命令用量" style="padding: 8px 16px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📊 命令用量</a>
+  <a href="#token用量" style="padding: 8px 16px; background: linear-gradient(135deg, #141414 0%, #434343 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🎫 Token 用量</a>
   <a href="#米哈游系列查询" style="padding: 8px 16px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; border-radius: 8px; text-decoration: none; font-weight: 500;">🎮 原神/星铁/绝区零</a>
   <a href="#鸣潮查询" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🌊 鸣潮查询</a>
   <a href="#椰羊实用功能" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐑 椰羊实用功能</a>
@@ -374,6 +375,35 @@ Bot：✅ 已添加语音触发  条目名：晚安  范围：仅群 888888  音
 
 ***
 
+<a name="token用量"></a>
+
+## 🎫 Token 用量（token-usage）
+
+想看 baka86bot 烧了多少 AI Token？发送命令即可把用量卡片以图片形式发出来，数据来自 [tokens.ci](https://tokens.ci/u/baka86)。
+
+```
+#token用量
+→ [一张 680×186 的用量卡片图片]
+```
+
+| 命令 | 说明 |
+| --- | --- |
+| `#token用量` | 发送用量卡片（60 秒内走缓存） |
+| `/token用量` | 同上，`/` 前缀也认 |
+| `#token用量 刷新` | 跳过缓存，强制重新拉取最新数据 |
+
+**别名**：`#token统计`、`#token额度`、`#token余额`、`#tokens用量`、`/token stats`。
+
+> 写法很宽松：`tokens` 带不带 `s` 都行、中间可以有空格、大小写不敏感；结尾还可加 `刷新` / `更新` / `refresh` / `强制` 来强制刷新。
+
+**其他说明**
+
+- 卡片缓存 **60 秒**，同一分钟内多人同时发只会请求一次上游；并发访问也会自动去重。
+- 卡片内容为站点统计：Tokens 总量、Cost（美元）、Rank 排名与 UTC 更新时间，所以数值会随时间变化。
+- 上游 tokens.ci 在 Cloudflare 后面，偶尔会抽风；插件会自动重试 3 次，仍失败则回复错误提示与 `https://tokens.ci/u/baka86` 链接，不会把消息吞掉。
+
+***
+
 <a name="米哈游系列查询"></a>
 
 ## 🎮 米哈游系列查询（原神 / 星铁 / 绝区零）
@@ -674,4 +704,4 @@ QQ 群多人小游戏，支持自定义词库与胜率排行，**投票在私聊
 
 ***
 
-*文档最后更新时间：2026-10-15*
+*文档最后更新时间：2026-10-17*
