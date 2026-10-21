@@ -1,11 +1,11 @@
 ---
 title: baka86bot 娱乐功能说明
-description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动等"
-tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, 表情包]
+description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、大肥鱼、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动、AI 帮画等"
+tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 大肥鱼, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, AI帮画, 表情包]
 category: bot使用帮助
 draft: false
 published: 2026-03-29
-updated: 2026-10-17
+updated: 2026-10-22
 ---
 
 # baka86bot 娱乐功能说明
@@ -25,6 +25,7 @@ updated: 2026-10-17
   <a href="#戳戳榜" style="padding: 8px 16px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">👆 戳一戳榜</a>
   <a href="#语音触发" style="padding: 8px 16px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; border-radius: 8px; text-decoration: none; font-weight: 500;">🔊 语音触发</a>
   <a href="#肥鱼说" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐟 肥鱼说</a>
+  <a href="#大肥鱼" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐠 大肥鱼</a>
   <a href="#课程表" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📅 课程表</a>
   <a href="#在干嘛" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">👀 在干嘛</a>
   <a href="#命令用量" style="padding: 8px 16px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📊 命令用量</a>
@@ -300,6 +301,22 @@ Bot：✅ 已添加语音触发  条目名：晚安  范围：仅群 888888  音
 | `肥鱼说设置` | 调整字号、颜色、对齐、内边距、自动换行等参数 |
 
 > 文字会自动换行，内容过长时字号自动缩小，无需手动排版。
+
+***
+
+<a name="大肥鱼"></a>
+
+## 🐠 大肥鱼（dafeiyu）
+
+从[梗鲸](https://aigengtu.com/)的 [DeepSeek娘表情包](https://aigengtu.com/DeepSeek%E5%A8%98)图库里随机捞一张发出来。
+
+| 命令 | 说明 |
+| --- | --- |
+| `大肥鱼` | 随机发一张（`#`、`/` 前缀都认） |
+| `来张大肥鱼` / `来个大肥鱼` / `随机大肥鱼` | 同上 |
+| `大肥鱼图` / `大肥鱼表情包` / `大肥鱼一张` | 同上 |
+
+> 图库有两千多张，每次随机抽一张；某张图下载失败会自动换一张重试（最多换 3 张），全部失败才回错误提示。
 
 ***
 
@@ -700,8 +717,25 @@ QQ 群多人小游戏，支持自定义词库与胜率排行，**投票在私聊
 
 ***
 
+### 🤖 AI 帮画（acodraw）
+
+由 **AcoFork** 提供的 AI 绘图，机器人会先把你的描述整理成提示词再出图。**属于白名单功能**：只有白名单里的 QQ 能用，群聊还需要群号也在白名单里。
+
+| 命令 | 别名 | 说明 |
+| --- | --- | --- |
+| `画画 <描述>` | `画图`、`ai画图` | 让 AI 整理需求后出图 |
+| `直出 <提示词>` | `直接出图` | 跳过 AI，直接把提示词提交给绘图后端 |
+| `队列` | `绘图队列` | 查看排队中 / 生成中的任务 |
+| `余额` | `绘图余额` | 查看剩余点数 |
+| `取消` | `取消绘图` | 取消最近一个未完成的任务 |
+| `重置绘画` | `清空对话` | 清空 AI 对话上下文 |
+
+> `画画` 与 `直出` 的区别：前者走「AI 整理 → 出图」，适合口语化描述；后者只做提交，适合你已经写好提示词、想精确控制的情况。
+
+***
+
 **[⬆️ 返回顶部](#baka86bot-娱乐功能说明)**
 
 ***
 
-*文档最后更新时间：2026-10-17*
+*文档最后更新时间：2026-10-22*
