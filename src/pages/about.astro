@@ -71,6 +71,9 @@ import MainGridLayout from "@/layouts/MainGridLayout.astro";
 <style>
     .about-page {
         max-width: 100%;
+        /* 主题未在 html/body 上设基础文字色，此处必须显式指定，
+           否则未加 class 的 <p> 会继承初始值（黑色），在暗色模式下不可见 */
+        color: var(--text-content);
     }
 
     .section {
@@ -129,6 +132,17 @@ import MainGridLayout from "@/layouts/MainGridLayout.astro";
     }
 
     .link-list a:hover, .contact-list a:hover {
+        text-decoration: underline;
+    }
+
+    /* 正文段落里的行内链接（不在 link-list / contact-list 内）。
+       只作用于 <p>，避免覆盖 GitHubRepos 中 .repo-card 的 color: inherit */
+    .about-page p a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .about-page p a:hover {
         text-decoration: underline;
     }
 
