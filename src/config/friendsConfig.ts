@@ -103,6 +103,15 @@ export const friendsConfig: FriendLink[] = [
 		weight: 10,
 		enabled: true,
 	},
+	{
+		title: "Inverted World.",
+		imgurl: "https://invtwd.25nightcord.icu/logo.jpg",
+		desc: "Can you still hear the song of the cosmos?",
+		siteurl: "https://invtwd.25nightcord.icu/",
+		tags: ["Blog"],
+		weight: 10,
+		enabled: true,
+	},
 ];
 
 // 获取启用的友链并进行排序
