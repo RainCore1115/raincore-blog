@@ -48,26 +48,6 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true,
 	},
 	{
-		title: "Milk's Blog",
-		imgurl:
-			"https://upload.awmc.cc/uploads/20260330/c095b9df52d0c466ee38bdf202262176.png",
-		desc: "喵喵咕噜咕噜～",
-		siteurl: "https://blog.awmc.cc",
-		tags: ["Blog"],
-		weight: 10,
-		enabled: true,
-	},
-	{
-		title: "AWMC BBS",
-		imgurl:
-			"https://upload.awmc.cc/uploads/20260330/c095b9df52d0c466ee38bdf202262176.png",
-		desc: "awmc论坛",
-		siteurl: "https://awmc.cc",
-		tags: ["Discussion"],
-		weight: 9,
-		enabled: true,
-	},
-	{
 		title: "Dmocken的Phira下载站",
 		imgurl: "https://phira.dmocken.top/Phira.png",
 		desc: "只是一个普普通通的下载站~",
