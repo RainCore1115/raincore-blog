@@ -30,7 +30,7 @@ CREDENTIALS = os.environ.get(
     "SCAN_CREDENTIALS", "/root/.config/blog-bot-scan/credentials"
 )
 
-SKIP_DIRS = {"node_modules", "data", "__pycache__", ".git", "config"}
+SKIP_DIRS = {"node_modules", "data", "__pycache__", ".git", "config", "tests", "test"}
 TRIGGER_KEY = re.compile(r"\b(reg|rule)\s*:")
 CONST_ASSIGN = re.compile(r"(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=")
 IDENT_RE = re.compile(r"[A-Za-z_$][A-Za-z0-9_$]*")

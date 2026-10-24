@@ -1,11 +1,11 @@
 ---
 title: baka86bot 音游查分食用教程
 description: "整合4K准度计算器、osu!/osu!mania/Malody、舞萌DX（Yunzai 与 NoneBot 双版本，含 PC50、对手查分、免扫码传分、机台写入与五种猜歌玩法）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
-tags: [bot, 4k, osu, osu!mania, osumania, malody, maimai, pc50, 舞萌上传, 对手查分, 免扫码传分, 机台写入, upload, unlock, 转生, 猜key音, 开字母, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
+tags: [bot, 4k, osu, osu!mania, osumania, malody, maimai, pc50, 舞萌上传, 对手查分, 免扫码传分, 机台写入, upload, unlock, kaleidxscope, 转生, 猜key音, 开字母, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
 published: 2026-04-24
-updated: 2026-10-22
+updated: 2026-10-25
 ---
 
 # baka86bot 功能使用指南合集
@@ -671,12 +671,13 @@ prp b50
 
 对机台账号的**真实写操作**，属于白名单功能。免二维码：不写二维码时复用你 `登录` 时建立的会话；也可以直接在命令里带二维码（84 字符 `SGWCMAID...`）走一次性登录。
 
-| 指令 | 参数 | 权限 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `upload` | `[二维码] <曲ID> <难度> <达成率> [DX分] [选项...]` | 白名单用户 | 上传一局成绩到机台账号 |
-| `unlock` | `[二维码] <曲ID...>` | 白名单用户 | 解锁这些曲目的 MASTER 与 Re:MASTER |
-| `reincarnate-plan` | `<me\|源二维码\|uid=userId\|json=文件名> [per=1/3/4] [limit=N]` | 白名单用户 | 转生分批预览（只读，不改数据） |
-| `reincarnate` | `[目标二维码] <me\|源二维码\|uid=userId\|json=文件名> [per=1/3/4] [limit=N]` | 白名单用户 | 把源账号的全量成绩分批写入目标账号 |
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `upload` | — | `[二维码] <曲ID> <难度> <达成率> [DX分] [选项...]` | 白名单用户 | 上传一局成绩到机台账号 |
+| `unlock` | — | `[二维码] <曲ID...>` | 白名单用户 | 解锁这些曲目的 MASTER 与 Re:MASTER |
+| `kaleidxscope` | `ks解锁`、`门解锁`、`钥匙解锁`、`unlock-ks` | `[二维码] <门/钥匙ID...>` 或 `gate=1,2 key=3,4` | 白名单用户 | 解锁 KALEIDXSCOPE 的门（发现）/ 钥匙（获得） |
+| `reincarnate-plan` | — | `<me\|源二维码\|uid=userId\|json=文件名> [per=1/3/4] [limit=N]` | 白名单用户 | 转生分批预览（只读，不改数据） |
+| `reincarnate` | — | `[目标二维码] <me\|源二维码\|uid=userId\|json=文件名> [per=1/3/4] [limit=N]` | 白名单用户 | 把源账号的全量成绩分批写入目标账号 |
 
 **`upload` 参数说明**
 
@@ -685,6 +686,13 @@ prp b50
 - 判定总数与各类 note 构成会**自动从谱面表读取**，通常不用手填。
 - 常用选项（空格分隔、顺序任意）：`fc` / `fc+` / `ap` / `ap+` 连击状态；`miss=` / `great=` / `good=` 全局判定数；`combo=` 最大连击；`tap=` / `hold=` / `slide=` / `touch=` / `break=` 逐类型判定明细；`notes=` 覆盖判定总数。
 - 示例：`/upload 143 3 100.5 1234`、`/upload 10030 3 101 ap`、`/upload 143 3 99.5 fc miss=3`
+
+**`kaleidxscope` 参数说明**
+
+- 用于解锁 **KALEIDXSCOPE** 的门（发现）与钥匙（获得），门 / 钥匙 ID 在当前版本一一对应。
+- 只写数字 = 同时解锁门与钥匙，例如 `/kaleidxscope 1 2 3`。
+- 想只解锁其中一种就分开写：`gate=1,2` 只开门，`key=3,4` 只拿钥匙（逗号分隔）。
+- 示例：`/kaleidxscope 1 2 3`、`/kaleidxscope gate=1,2 key=5`
 
 **转生（reincarnate）怎么用**
 
@@ -1117,4 +1125,4 @@ prp b50
 
 ***
 
-*文档最后更新时间：2026-10-22*
+*文档最后更新时间：2026-10-25*
