@@ -87,10 +87,10 @@ export const friendsConfig: FriendLink[] = [
 	},
 	{
 		title: "落雪咖啡屋",
-		imgurl: "https://awmc.cc/media/image_1776709261927_32-png.242/",
+		imgurl: "https://lxns.net/favicon.webp",
 		desc: "Score Tracker",
 		siteurl: "https://lxns.net/",
-		tags: ["Software"],
+		tags: ["Blog"],
 		weight: 10,
 		enabled: true,
 	},
