@@ -328,9 +328,20 @@ const widgetId =
         ui.totalTime.innerText = '0:00';
     }
 
-    function renderPlaylist(playlist, currentIndex) {
-        ui.playlistContainer.innerHTML = '';
-        playlist.forEach(function (track, idx) {
+    // ── 播放列表增量渲染 ─────────────────────────────────────
+    // 歌单可能是数千首（例如网易云整张歌单），一次性 appendChild 会产生
+    // 上万个 DOM 节点并触发同样数量的封面图请求，首屏样式重算与布局会
+    // 被拖到几十秒。这里只先渲染一小段，滚动到底部附近再追加下一段。
+    var PLAYLIST_CHUNK = 50;
+    var activePlaylist = [];
+    var renderedUpTo = 0;
+
+    function appendPlaylistChunk(fromIndex) {
+        if (fromIndex >= activePlaylist.length) return;
+        var end = Math.min(fromIndex + PLAYLIST_CHUNK, activePlaylist.length);
+        var frag = document.createDocumentFragment();
+        for (var idx = fromIndex; idx < end; idx++) {
+            var track = activePlaylist[idx];
             var clone = ui.itemTemplate.content.cloneNode(true);
             var itemEl = clone.querySelector('.playlist-item');
             var img = clone.querySelector('.item-cover');
@@ -345,12 +356,34 @@ const widgetId =
             itemEl.dataset.index = idx;
             itemEl.setAttribute('role', 'option');
             itemEl.setAttribute('aria-label', track.name + ' - ' + track.artist);
-            itemEl.onclick = function () {
-                mgr.playTrackByIndex(idx);
-            };
-            ui.playlistContainer.appendChild(clone);
-        });
+            itemEl.onclick = (function (i) {
+                return function () {
+                    mgr.playTrackByIndex(i);
+                };
+            })(idx);
+            frag.appendChild(clone);
+        }
+        ui.playlistContainer.appendChild(frag);
+        renderedUpTo = end;
+    }
+
+    function renderPlaylist(playlist, currentIndex) {
+        activePlaylist = playlist || [];
+        ui.playlistContainer.innerHTML = '';
+        renderedUpTo = 0;
+        appendPlaylistChunk(0);
         updatePlaylistActiveUI(currentIndex);
+    }
+
+    // 滚动到底部附近时继续渲染后续曲目（列表很长时不必一次性建完 DOM）
+    if (ui.playlistContainer) {
+        ui.playlistContainer.addEventListener('scroll', function () {
+            if (renderedUpTo >= activePlaylist.length) return;
+            var el = ui.playlistContainer;
+            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 80) {
+                appendPlaylistChunk(renderedUpTo);
+            }
+        }, { passive: true });
     }
 
     function updatePlaylistActiveUI(currentIndex) {
