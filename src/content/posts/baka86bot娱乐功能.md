@@ -1,16 +1,16 @@
 ---
 title: baka86bot 娱乐功能说明
-description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、大肥鱼、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动、AI 帮画等"
-tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 大肥鱼, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, AI帮画, 表情包]
+description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、大肥鱼、随机抽象视频、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动、AI 帮画等"
+tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 大肥鱼, 随机抽象视频, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, AI帮画, randomvideo, 表情包]
 category: bot使用帮助
 draft: false
 published: 2026-03-29
-updated: 2026-10-22
+updated: 2026-10-29
 ---
 
 # baka86bot 娱乐功能说明
 
-本文档介绍 baka86bot 的娱乐与实用功能，包括鹿功能签到系统、杯面返还机制、KKB 互动系统，以及戳戳榜、语音触发、肥鱼说、课程表、在干嘛、命令用量、Token 用量、米哈游系列与鸣潮查询、椰羊小工具等。
+本文档介绍 baka86bot 的娱乐与实用功能，包括鹿功能签到系统、杯面返还机制、KKB 互动系统，以及戳戳榜、语音触发、肥鱼说、大肥鱼、随机抽象视频、课程表、在干嘛、命令用量、Token 用量、米哈游系列与鸣潮查询、椰羊小工具等。
 
 > 🎵 **音游相关功能**（4K 准度计算器、osu!/Malody、舞萌DX、Phigros、Rizline、CHUNITHM、舞立方、Paradigm、PJSK）请看另一篇：[baka86bot 音游查分食用教程](/posts/bot-help-integrated/)。
 
@@ -26,6 +26,7 @@ updated: 2026-10-22
   <a href="#语音触发" style="padding: 8px 16px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; border-radius: 8px; text-decoration: none; font-weight: 500;">🔊 语音触发</a>
   <a href="#肥鱼说" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐟 肥鱼说</a>
   <a href="#大肥鱼" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐠 大肥鱼</a>
+  <a href="#随机抽象视频" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🎬 随机抽象视频</a>
   <a href="#课程表" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📅 课程表</a>
   <a href="#在干嘛" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">👀 在干嘛</a>
   <a href="#命令用量" style="padding: 8px 16px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📊 命令用量</a>
@@ -317,6 +318,27 @@ Bot：✅ 已添加语音触发  条目名：晚安  范围：仅群 888888  音
 | `大肥鱼图` / `大肥鱼表情包` / `大肥鱼一张` | 同上 |
 
 > 图库有两千多张，每次随机抽一张；某张图下载失败会自动换一张重试（最多换 3 张），全部失败才回错误提示。
+
+***
+
+<a name="随机抽象视频"></a>
+
+## 🎬 随机抽象视频（randomvideo）
+
+从 B 站视频列表里随机抽一条发到群里，列表由群友自己攒。**零第三方依赖**，插件目录下的 `videolist.json` 存 BV 号（可用环境变量 `VIDEO_DATA_FILE` 改存储位置）。
+
+| 命令 | 说明 |
+| :--- | :--- |
+| `#添加抽象视频BV1xxxxxxxxx` | 校验 BV 号并加入列表；重复添加会告诉你此前是谁、在哪个群、什么时候加的 |
+| `#来个抽象视频` | 从列表里随机抽一条发出来 |
+
+**上传会留痕**：添加成功时回复会列出**时间 / 群聊 / 上传者**三项，随机发出的视频也带一行 `来源：上传者(QQ)｜群名(群号)｜时间`。
+
+**其它行为**
+
+- 单文件超过 **50MB** 会被自动拦截，并把该条从列表里移除（上限可用环境变量 `MAX_VIDEO_MB` 调整）。
+- 解析 B 站视频流时会自动在几组请求头之间切换，遇到 412 / 403 风控会记住可用的那组，机房 IP 也能解析。
+- 该列表与配套的[视频分发 API](https://github.com/project-baka86/random-video-api) 共用同一份数据，把 API 的 `VIDEO_DATA_FILE` 指向这个 `videolist.json` 即可。
 
 ***
 
@@ -738,4 +760,4 @@ QQ 群多人小游戏，支持自定义词库与胜率排行，**投票在私聊
 
 ***
 
-*文档最后更新时间：2026-10-22*
+*文档最后更新时间：2026-10-29*
