@@ -294,7 +294,15 @@ if (document.readyState === 'loading') {
 {
     import.meta.env.PROD && (
         <script is:inline data-swup-ignore-script define:vars={{ scriptUrl: url('/pagefind/pagefind.js') }}>
-            {/* 你的 loadPagefind 函数的完整内容放在这里 */}
+            // Pagefind 按需加载。
+            //
+            // 原来每页 DOMContentLoaded 就 fetch HEAD + import('/pagefind/pagefind.js')，
+            // 33KB 且带着索引分片，对「从不搜索的访问」纯属浪费，也会和首屏抢带宽。
+            // 现在只在这里**定义**加载器，由消费方在用户真的要搜索时调
+            // window.__pagefindLoad()（Search.svelte 聚焦搜索框时、搜索页进入时）。
+            // 事件契约 pagefindready / pagefindloaderror 保持不变，消费方判断逻辑不用改。
+            let pagefindPromise = null;
+
             async function loadPagefind() {
                 try {
                     const response = await fetch(scriptUrl, { method: 'HEAD' });
@@ -319,11 +327,19 @@ if (document.readyState === 'loading') {
                 }
             }
 
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', loadPagefind);
-            } else {
-                loadPagefind();
-            }
+            // 幂等：并发调用共用同一次加载，避免重复 import。
+            window.__pagefindLoad = function () {
+                if (window.pagefind) {
+                    return Promise.resolve(window.pagefind);
+                }
+                if (!pagefindPromise) {
+                    pagefindPromise = loadPagefind().then(function () {
+                        pagefindPromise = null;
+                        return window.pagefind;
+                    });
+                }
+                return pagefindPromise;
+            };
         </script>
     )
 }

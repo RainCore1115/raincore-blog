@@ -31,7 +31,21 @@ const fakeResult: SearchResult[] = [
 ];
 
 // --- UI Logic ---
+/**
+ * 按需触发 Pagefind 加载（生产环境）。
+ *
+ * 加载器由 Navbar.astro 的 inline script 挂到 window.__pagefindLoad 上，
+ * 这里只在用户第一次真的要搜索时叫它：聚焦桌面搜索框、或展开移动端搜索面板。
+ * 加载完成/失败都会派发 pagefindready / pagefindloaderror，下面 onMount 的监听器
+ * 负责置 initialized=true 并补跑当前关键词的搜索。
+ */
+const ensurePagefind = (): void => {
+	if (import.meta.env.DEV || initialized) return;
+	window.__pagefindLoad?.();
+};
+
 const togglePanel = () => {
+	ensurePagefind();
 	document
 		.getElementById("search-panel")
 		?.classList.toggle("float-panel-closed");
@@ -70,6 +84,9 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 		result = [];
 		return;
 	}
+	// 覆盖所有入口（聚焦、移动端展开、外部改 keyword）：没加载就先叫起来，
+	// 加载完成后 pagefindready 监听器会带上当前关键词重跑。
+	ensurePagefind();
 	if (!initialized) return;
 
 	isSearching = true;
@@ -144,7 +161,7 @@ $: if (initialized && (keywordMobile || keywordMobile === "")) {
     <Icon icon="material-symbols:search"
           class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"></Icon>
     <input placeholder="{i18n(I18nKey.search)}" bind:value={keywordDesktop}
-           on:focus={() => search(keywordDesktop, true)}
+           on:focus={() => { ensurePagefind(); search(keywordDesktop, true); }}
            class="transition-all pl-10 text-sm bg-transparent outline-0
          h-full w-40 active:w-60 focus:w-60 text-black/50 dark:text-white/50"
     >
