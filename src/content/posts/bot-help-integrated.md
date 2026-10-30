@@ -1,11 +1,11 @@
 ---
 title: baka86bot 音游查分食用教程
-description: "整合4K准度计算器、osu!/osu!mania/Malody、舞萌DX（Yunzai 与 NoneBot 双版本，含 PC50、对手查分、免扫码传分、机台写入与五种猜歌玩法）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
-tags: [bot, 4k, osu, osu!mania, osumania, malody, maimai, pc50, 舞萌上传, 对手查分, 免扫码传分, 机台写入, upload, unlock, kaleidxscope, 转生, 猜key音, 开字母, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
+description: "整合4K准度计算器、osu!/osu!mania/Malody、舞萌DX（Yunzai 与 NoneBot 双版本，含 PC50、对手查分、免扫码传分、机台写入、五种猜歌玩法与曲目配信日历）、舞立方 DanceFeng、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
+tags: [bot, 4k, osu, osu!mania, osumania, malody, maimai, pc50, 舞萌上传, 对手查分, 免扫码传分, 机台写入, upload, unlock, kaleidxscope, 转生, 曲目配信, 配信推送, 猜key音, 开字母, 舞立方, DanceFeng, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
 published: 2026-04-24
-updated: 2026-10-25
+updated: 2026-10-31
 ---
 
 # baka86bot 功能使用指南合集
@@ -717,7 +717,7 @@ prp b50
 | `<版本代>b50` | — | — | 普通用户（需绑定） | 如 `熊代b50`、`镜代b35`、`dx2026b35` |
 | `l<版本代>b50` | — | — | 普通用户（需绑定） | 旧版本定数重算，如 `l熊代b50` |
 | `合作b50` | `合作a50` | `@好友` | 普通用户（需绑定） | 与好友合并 B50 |
-| `帮助扩展` | `扩展帮助`、`maimai帮助`、`舞萌帮助` | — | 普通用户 | 输出扩展功能菜单 |
+| `帮助扩展` | `帮助`/`拓展`/`扩展`/`功能`/`菜单` 里任意两词的组合（`扩展帮助`、`帮助拓展`、`扩展功能`、`功能菜单`…），以及 `maimai帮助`、`mai帮助`、`舞萌帮助`、`舞萌菜单` 等 | — | 普通用户 | 输出扩展功能菜单；开头可带 `/` 或 `／` |
 
 ## 舞萌DX（NoneBot） - 对手查询（白名单）
 
@@ -809,6 +809,21 @@ prp b50
 | `我要在[等级]上加[分数]分` | — | — | 普通用户（需绑定） | 上分推荐，如 `我要在14上加100分` |
 | `帮助maimaiDX` | `帮助maimaidx` | — | 普通用户 | 原版图文帮助 |
 | `项目地址maimaiDX` | `项目地址maimaidx` | — | 普通用户 | 插件项目地址 |
+
+## 舞萌DX（NoneBot） - 曲目配信日历
+
+查询 maimai DX 的新曲配信安排，并可按群订阅每天 10:00 的「即将配信」推送。
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `查看曲目配信` | `曲目配信`、`配信日历`、`配信查询`、`版本配信`、`即将配信`、`查看配信`、`最近配信`、`配信情报`、`新曲配信` | `全部` / `最新` / `未来7天` / `11-11` / `2026-11-11` | 普通用户 | 出配信日历图；留空看「即将配信」，当天没有未配信曲目时回退成「最近配信」 |
+| `开启配信推送` | `配信推送开启` | — | 群聊 | 开启本群推送（每天 10:00 推即将配信的曲目） |
+| `关闭配信推送` | `配信推送关闭` | — | 群聊 | 关闭本群推送 |
+| `配信推送状态` | `查看配信推送`、`配信推送`、`配信推送查询`、`推送状态`、`配信设置` | — | 群聊 | 查看本群开关、推送范围、推送时间与当前数据版本 |
+
+> 推送目标群取**两处并集再减去手动关闭的群**：`.env` 里的 `MAIMAIDX_RELEASE_PUSH_GROUPS`，以及各群用 `开启配信推送` 写入的运行时开关（存于 `group_release_push_switch.json`）。
+>
+> 推送范围由 `maimaidx_release_push_days` 控制（默认 30 天，设为 `0` 表示全部已公布日期），总开关 `maimaidx_release_push_enable` 默认开启。配信数据来自落雪查分器，需配置 `LXNS_DEV_TOKEN`；日期与「数据更新时间」均为北京时间，配信时刻按当日 07:00 计算。
 
 ## 舞萌DX（NoneBot） - 定数表 / 完成表 / 牌子
 
@@ -1125,4 +1140,4 @@ prp b50
 
 ***
 
-*文档最后更新时间：2026-10-25*
+*文档最后更新时间：2026-10-31*
