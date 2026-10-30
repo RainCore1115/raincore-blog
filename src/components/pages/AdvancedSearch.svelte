@@ -91,9 +91,7 @@ onMount(() => {
 	if (import.meta.env.DEV) {
 		initialize();
 	} else {
-		// 生产环境：搜索页本身就是为搜索而生的，进来就按需触发 Pagefind 加载；
-		// 加载完成派发 pagefindready，再由监听器 initialize。
-		window.__pagefindLoad?.();
+		// 生产环境等待 Pagefind 加载
 		if (window.pagefind) {
 			initialize();
 		} else {

@@ -20,8 +20,6 @@ declare global {
 				}>;
 			}>;
 		};
-		/** Navbar.astro 注入的 Pagefind 按需加载器（幂等，生产环境才有）。 */
-		__pagefindLoad?: () => Promise<unknown>;
 		__fireflyMusic?: {
 			init: () => Promise<void>;
 			getState: () => {
