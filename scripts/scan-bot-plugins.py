@@ -262,7 +262,7 @@ out["missing"] = []
 for plugin in out["loaded"]:
     alt = plugin.replace("-", "_")
     cands = []
-    for base in (sp, NB):
+    for base in (sp, NB, os.path.join(NB, "plugins")):
         if not base:
             continue
         for name in (plugin, alt):

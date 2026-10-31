@@ -1,16 +1,16 @@
 ---
 title: baka86bot 娱乐功能说明
-description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、大肥鱼、随机抽象视频、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动、AI 帮画等"
-tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 大肥鱼, 随机抽象视频, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, AI帮画, randomvideo, 表情包]
+description: "baka86bot 娱乐与实用插件使用帮助（Yunzai + NoneBot 双版本）：鹿功能签到、杯面返还、KKB互动、戳戳榜、语音触发、肥鱼说、大肥鱼、随机抽象视频、课程表、在干嘛、命令用量、Token 用量、原神/星铁/绝区零、鸣潮、椰羊工具、自动同意好友，以及 NoneBot 版谁是卧底、牛子PK、今日老婆、喜报、伪造消息、三角洲行动、AI 帮画等"
+tags: [bot, 娱乐, 鹿功能, 签到, 杯面, KKB, 戳一戳, 语音触发, 肥鱼说, 大肥鱼, 随机抽象视频, 课程表, 状态查询, 命令用量, token用量, tokens.ci, 原神, 星铁, 绝区零, 鸣潮, 椰羊, NoneBot, 谁是卧底, 牛子PK, 今日老婆, 喜报, 伪造消息, 三角洲行动, AI帮画, randomvideo, auto-friend, 自动同意好友, 好友请求, 表情包]
 category: bot使用帮助
 draft: false
 published: 2026-03-29
-updated: 2026-10-29
+updated: 2026-11-01
 ---
 
 # baka86bot 娱乐功能说明
 
-本文档介绍 baka86bot 的娱乐与实用功能，包括鹿功能签到系统、杯面返还机制、KKB 互动系统，以及戳戳榜、语音触发、肥鱼说、大肥鱼、随机抽象视频、课程表、在干嘛、命令用量、Token 用量、米哈游系列与鸣潮查询、椰羊小工具等。
+本文档介绍 baka86bot 的娱乐与实用功能，包括鹿功能签到系统、杯面返还机制、KKB 互动系统，以及戳戳榜、语音触发、肥鱼说、大肥鱼、随机抽象视频、课程表、在干嘛、命令用量、Token 用量、米哈游系列与鸣潮查询、椰羊小工具、自动同意好友等。
 
 > 🎵 **音游相关功能**（4K 准度计算器、osu!/Malody、舞萌DX、Phigros、Rizline、CHUNITHM、舞立方、Paradigm、PJSK）请看另一篇：[baka86bot 音游查分食用教程](/posts/bot-help-integrated/)。
 
@@ -27,6 +27,7 @@ updated: 2026-10-29
   <a href="#肥鱼说" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐟 肥鱼说</a>
   <a href="#大肥鱼" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🐠 大肥鱼</a>
   <a href="#随机抽象视频" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🎬 随机抽象视频</a>
+  <a href="#自动同意好友" style="padding: 8px 16px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">🤝 自动同意好友</a>
   <a href="#课程表" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📅 课程表</a>
   <a href="#在干嘛" style="padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">👀 在干嘛</a>
   <a href="#命令用量" style="padding: 8px 16px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">📊 命令用量</a>
@@ -570,6 +571,42 @@ Bot：✅ 已添加语音触发  条目名：晚安  范围：仅群 888888  音
 
 ***
 
+<a name="自动同意好友"></a>
+
+## 🤝 自动同意好友（auto-friend）
+
+收到好友请求时自动通过，可控可审计。**指令均为管理员（主人）专用**，普通群友用不到，这里仅作存档。
+
+| 指令 | 说明 |
+| :--- | :--- |
+| `#自动同意好友` | 查看当前状态与今日已通过数 |
+| `#自动同意好友 开启` / `关闭` | 开关自动通过 |
+| `#自动同意好友 白名单模式 开` / `关` | 只通过白名单内的 QQ |
+| `#自动同意好友 关键词 <答案词>` | 仅当验证信息包含该词才通过（留空取消） |
+| `#自动同意好友 欢迎语 <文本>` | 通过后自动私信新好友的内容（留空取消） |
+| `#自动同意好友 通知 开` / `关` | 通过/拒绝是否私聊通知主人 |
+| `#好友白名单 添加` / `删除` / `列表 [QQ]` | 管理白名单 |
+| `#好友黑名单 添加` / `删除` / `列表 [QQ]` | 管理黑名单（永不通过） |
+
+**防刷与配置**（首次加载在插件目录生成 `config.json`）：
+
+| 配置项 | 默认值 | 说明 |
+| :--- | :--- | :--- |
+| `enabled` | `true` | 总开关 |
+| `delayMs` | `1500` | 延迟通过，避免秒通过触发风控 |
+| `whitelistOnly` | `false` | 是否只通过白名单 |
+| `answerKeyword` | `""` | 验证关键词，留空表示不校验 |
+| `minIntervalMs` | `0` | 两次通过的最小间隔 |
+| `dailyLimit` | `0` | 每日通过上限，`0` 为不限制 |
+| `welcome` | `""` | 通过后发送的欢迎语 |
+| `notifyMaster` | `true` | 是否私聊通知主人 |
+
+> 运行时状态（今日已通过数、上次通过时间）存在 `state.json`，按天自动归零。
+>
+> 系统自带的 `plugins/system/friend.js` 在 `config.other.autoFriend: 1` 时会**无条件**同意好友，会绕过本插件的黑名单/关键词限制；因此已把 `autoFriend` 置为 `0`，由本插件接管。
+
+***
+
 <a name="nonebot娱乐插件"></a>
 
 ## 🤖 NoneBot 版娱乐插件
@@ -760,4 +797,4 @@ QQ 群多人小游戏，支持自定义词库与胜率排行，**投票在私聊
 
 ***
 
-*文档最后更新时间：2026-10-29*
+*文档最后更新时间：2026-11-01*
