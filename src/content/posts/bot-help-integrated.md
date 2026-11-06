@@ -1,11 +1,11 @@
 ---
 title: baka86bot 音游查分食用教程
-description: "整合4K准度计算器、osu!/osu!mania/Malody、舞萌DX（Yunzai 与 NoneBot 双版本，含 PC50、对手查分、免扫码传分、机台写入、五种猜歌玩法与曲目配信日历）、舞立方 DanceFeng、Rotaeno（旋转音律）、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
-tags: [bot, 4k, osu, osu!mania, osumania, malody, maimai, pc50, 舞萌上传, 对手查分, 免扫码传分, 机台写入, upload, unlock, kaleidxscope, 转生, 曲目配信, 配信推送, 猜key音, 开字母, 舞立方, DanceFeng, Rotaeno, 旋转音律, rtnbot, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
+description: "整合4K准度计算器、osu!/osu!mania/Malody、舞萌DX（Yunzai 与 NoneBot 双版本，含 PC50、对手查分、免扫码传分、机台写入、五种猜歌玩法、曲目配信日历与 AstroDX 本地成绩（adx 数据源））、舞立方 DanceFeng、Rotaeno（旋转音律）、Phi（Phigros）、Rizline、CHUNITHM（中二节奏）、Paradigm: Reboot 与 PJSK 的音游查分使用帮助"
+tags: [bot, 4k, adx, AstroDX, 上传adx成绩, osu, osu!mania, osumania, malody, maimai, pc50, 舞萌上传, 对手查分, 免扫码传分, 机台写入, upload, unlock, kaleidxscope, 转生, 曲目配信, 配信推送, 猜key音, 开字母, 舞立方, DanceFeng, Rotaeno, 旋转音律, rtnbot, NoneBot, Phigros, Rizline, CHUNITHM, Paradigm, PJSK, 音游]
 category: bot使用帮助
 draft: false
 published: 2026-04-24
-updated: 2026-11-01
+updated: 2026-11-06
 ---
 
 # baka86bot 功能使用指南合集
@@ -619,7 +619,7 @@ prp b50
 
 > 适用插件 `nonebot_plugin_maimaidx`（NoneBot2 + OneBot V11，移植自 mai-bot）。命令**直接发送命令文字即可**（如直接发 `b50`），源码没有自定义前缀，是否需前缀取决于 Bot 全局 `COMMAND_START`。唯一例外：倍率票 `/tk2`、`/tk3`、`/tk5` 必须带斜杠。
 >
-> - 数据源只有两个：**水鱼 Diving-Fish** 与 **落雪 Lxns-Network**（「舞萌」是游戏名，不是第三个数据源），用 `数据源` 切换。
+> - 数据源有三个：**水鱼 Diving-Fish**（`0`）、**落雪 Lxns-Network**（`1`）与 **adx 本地缓存**（`2`，读你自己上传的 AstroDX 成绩）；「舞萌」是游戏名，不是数据源。用 `数据源` 切换。
 > - 多数指令支持 `@某人` 查询对方，不 `@` 则查自己；未标注权限的普通成员可用，部分需先绑定查分器。
 
 ## 舞萌DX（NoneBot） - 账号绑定与设置
@@ -635,9 +635,31 @@ prp b50
 | `lxtokenbind` | `lxbind`、`绑定落雪`、`绑定lx` | `[落雪密钥]` | 普通用户 | 落雪 Token 绑定（个人 API 密钥）；旧写法 `lxbind` 仍作为别名可用 |
 | `dfbindtoken` | `水鱼绑定`、`水鱼token`、`水鱼Token` | `<水鱼Token>` | 普通用户 | 水鱼 Token 本地绑定，Token 为 127–132 字符 |
 | `dfbind` | `绑定水鱼`、`绑定df` | — | 普通用户 | 水鱼 OAuth 绑定（上游 3.1.x 起从 Token 绑定改为此） |
-| `数据源` | — | `[序号]` | 普通用户 | 切换数据源：`0`=水鱼，`1`=落雪 |
+| `数据源` | — | `[序号 / 名称]` | 普通用户 | 切换数据源：`0`/水鱼、`1`/落雪、`2`/adx（也可直接写名称） |
 | `主题` | — | `[序号]` | 普通用户 | 切换绘图表主题：`0`=prism_plus，`1`=circle |
 | `verify` | `验证` | `baka86.love` | 普通用户 | 阅读协议完成白名单验证（365 天），部分机台/上传功能需要 |
+
+## 舞萌DX（NoneBot） - AstroDX 本地成绩（adx 数据源）
+
+手游端 AstroDX 的游玩记录可以导成 cache 文件交给 bot 入库，之后把数据源切成 `adx`，`b50`、`info`、底力分析等就都改为读你自己这份缓存，不再依赖在线查分器。
+
+| 指令 | 别名 | 参数 | 权限 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `上传adx成绩` | `上传adx`、`adx上传`、`上传adx缓存`、`上传astroDX成绩`、`上传astrodx成绩` | `[文件]` | 普通用户 | 上传 AstroDX 的 cache 文件入库；再次上传会**覆盖**旧数据 |
+| `删除adx成绩` | `清除adx成绩`、`删除adx缓存` | — | 普通用户 | 删除数据库里保存的缓存 |
+
+**用法**：两条路，任选其一 —— 直接把 cache 以「文件」形式跟指令一起发；或先发 `上传adx成绩`，再在 **5 分钟**内把文件发出来（群文件、私聊文件都行）。
+
+**cache 文件位置**：
+
+- Android：`Android/data/com.Reflektone.AstroDX/files/cache`
+- iOS：文件 App → 我的 iPhone/iPad → AstroDX/cache
+
+**限制**：文件**不要压缩、不要改名**，大小上限 5 MiB；曲库未收录的谱面会被跳过，不影响其它成绩。入库后发 `数据源 adx` 生效；只传过缓存但没切换数据源，指令仍走原来的查分器。
+
+> adx 读的是本地缓存，不经过在线查分器，所以**排行榜类指令在 adx 数据源下会被拒绝**，需要先发 `数据源 水鱼` 或 `数据源 落雪` 切回去。
+>
+> 切到 `adx` 时如果还没传过缓存，bot 会提示先上传；也可以直接发 `数据源 水鱼` 退回。
 
 ## 舞萌DX（NoneBot） - 机台会话（白名单，需先 `verify`）
 
@@ -919,7 +941,7 @@ prp b50
 
 > 流程中任意一步发送 `取消` 可退出登录。
 >
-> **加好友自动同意**：给机器人发好友请求会**自动通过**，并私信一条欢迎语「🥰呐~ 现在我们是好朋友啦！请发送"help"查看功能哦！」。插件自带 `access_list` 黑白名单，但当前**未启用**（导入与拦截调用都被注释掉了），所以是所有请求一律通过。
+> **加好友自动同意**：给机器人发好友请求会**自动通过**，并私信一条欢迎语「🥰呐~ 现在我们是好朋友啦！功能说明看这里：https://blog.baka86.love/posts/bot-help-integrated/」。插件自带 `access_list` 黑白名单，但当前**未启用**（导入与拦截调用都被注释掉了），所以是所有请求一律通过。
 
 ## 舞立方 - 账号与登录命令
 
@@ -960,9 +982,7 @@ prp b50
 
 ## 舞立方 - 帮助与配置速查
 
-| 指令 | 别名 | 说明 |
-| :--- | :--- | :--- |
-| `舞立方帮助` | `菜单`、`help`、`帮助`、`舞立方菜单`、`dancefeng帮助` | 回复舞立方功能文档链接（金山文档 kdocs） |
+`菜单` / `help` / `帮助` / `舞立方帮助` / `舞立方菜单` / `dancefeng帮助` 这六条写法的**菜单指令已被整体移除**，插件不再内置菜单；加好友欢迎语等自动提示改为直接给出本页地址，功能说明就看这里。
 
 | 配置项 | 位置 | 是否必须 | 说明 |
 | :--- | :--- | :--- | :--- |
@@ -1187,4 +1207,4 @@ prp b50
 
 ***
 
-*文档最后更新时间：2026-11-01*
+*文档最后更新时间：2026-11-06*
