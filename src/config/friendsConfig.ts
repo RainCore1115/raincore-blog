@@ -95,7 +95,7 @@ export const friendsConfig: FriendLink[] = [
 	{
 		title: "术无的草班子狼窝",
 		imgurl: "https://www.nishuwu.vip/shuwu.png",
-		desc: "术无的个人博客，嗷~",
+		desc: "（你想写啥写吧，别骂我就好）",
 		siteurl: "https://www.nishuwu.vip/",
 		tags: ["Blog"],
 		weight: 10,
