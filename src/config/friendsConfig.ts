@@ -92,6 +92,15 @@ export const friendsConfig: FriendLink[] = [
 		weight: 10,
 		enabled: true,
 	},
+	{
+		title: "术无的草班子狼窝",
+		imgurl: "https://www.nishuwu.vip/shuwu.png",
+		desc: "术无的个人博客，嗷~",
+		siteurl: "https://www.nishuwu.vip/",
+		tags: ["Blog"],
+		weight: 10,
+		enabled: true,
+	},
 ];
 
 // 获取启用的友链并进行排序
